@@ -7,7 +7,7 @@ export const theme = {
     'body-text': '#000',
     footer: '#676767',
     'primary-01': '#F6475F',
-    'primary-02': '##FF385C',
+    'primary-02': '#FF385C',
     'neutral-01': '#F7F7F7',
     'neutral-02': '#EBEBEB',
     'neutral-03': '#DDDDDD',
