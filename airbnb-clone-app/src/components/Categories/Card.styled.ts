@@ -23,7 +23,6 @@ export const StyledCard = styled.div<StyledCardProps>`
     props.isSelected
       ? `2px solid ${props.theme.colors['normal-text']}`
       : 'none'};
-
   &:hover {
     cursor: pointer;
     color: ${(props) => props.theme.colors['normal-text']};

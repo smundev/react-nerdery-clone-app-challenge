@@ -5,7 +5,7 @@ export const Chip = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
+  padding: 8px 8px 8px 10px;
   gap: 4px;
   border: 1px solid ${({ theme }) => theme.colors['neutral-03']};
 
