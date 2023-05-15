@@ -5,6 +5,7 @@ export const theme = {
     'header-text': '#000',
     'body-bg': '#FFFFFF',
     'body-text': '#000',
+    'normal-text': '#000000',
     footer: '#676767',
     'primary-01': '#F6475F',
     'primary-02': '#FF385C',

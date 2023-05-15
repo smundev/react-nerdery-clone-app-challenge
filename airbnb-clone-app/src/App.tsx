@@ -1,7 +1,12 @@
+import { Categories } from './components/Categories/Categories'
+
+import { Navbar } from './components/Styles/Nav/Navbar'
+
 function App() {
   return (
     <>
-      <div>this is a new project</div>
+      <Navbar />
+      <Categories />
     </>
   )
 }
