@@ -10,7 +10,8 @@ export const StyledCard = styled.div<StyledCardProps>`
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  padding-right: 2rem;
+  gap: 12px;
+  margin-right: 32px;
   height: 100%;
 
   color: ${(props) =>
