@@ -2,6 +2,8 @@ import styled from 'styled-components'
 
 type Props = {
   top?: number
+  mobileTop?: number
+  zIndex?: number
 }
 export const StickyWrapper = styled.div<Props>`
   position: sticky;
@@ -10,5 +12,9 @@ export const StickyWrapper = styled.div<Props>`
   width: 100%;
   height: fit-content;
   box-sizing: border-box;
-  z-index: 10;
+  z-index: ${(props) => props.zIndex || 1};
+
+  @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
+    top: ${(props) => props.mobileTop || 0}px;
+  }
 `

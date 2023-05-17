@@ -6,7 +6,6 @@ import { StyledCategory } from './Category.Styled'
 import { categories } from './catalog'
 import { StickyWrapper } from '../Styles/Common/StickyWrapper'
 import { useEffect, useState } from 'react'
-import { log } from 'console'
 
 export const Categories = () => {
   const [verticalScroll, setVerticalScroll] = useState(0)
@@ -20,7 +19,7 @@ export const Categories = () => {
   }, [])
 
   return (
-    <StickyWrapper top={84}>
+    <StickyWrapper top={84} mobileTop={143}>
       <StyledCategory showShadow={verticalScroll <= 50}>
         <ScrollContainer>
           {categories.map((item, i) => {
