@@ -6,7 +6,7 @@ import '@testing-library/jest-dom'
 describe('App', () => {
   it('renders the app component', () => {
     const { getByText } = render(<App />)
-    const appElement = getByText('this is a new project')
+    const appElement = getByText('this is the entry page')
     expect(appElement).toBeInTheDocument()
   })
 })

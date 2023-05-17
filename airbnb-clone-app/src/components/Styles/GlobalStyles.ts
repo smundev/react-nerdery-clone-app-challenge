@@ -10,6 +10,8 @@ export const GlobalStyles = createGlobalStyle`
 
 body{
     font-family: Airbnb Cereal, sans-serif;
+    width: 100%;
+    height: 100vh;
     font-size: 14px;
     line-height: 1.43;
     color: #222;
