@@ -1,8 +1,14 @@
 import styled from 'styled-components'
 
-export const Flex = styled.div`
+type Props = {
+  direction?: string
+  gap?: string
+}
+
+export const Flex = styled.div<Props>`
   display: flex;
+  flex-direction: ${(props) => props.direction || 'row'};
+  gap: ${(props) => props.gap || '0'};
   flex: 1;
-  align-items: center;
-  justify-content: space-between;
+  flex-wrap: wrap;
 `
