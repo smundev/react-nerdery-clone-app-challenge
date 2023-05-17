@@ -1,15 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import { GlobalStyles } from './components/Styles/GlobalStyles';
-import { ThemeProvider } from 'styled-components';
-import { theme } from './components/Styles/theme';
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import { GlobalStyles } from './components/Styles/GlobalStyles'
+import { ThemeProvider } from 'styled-components'
+import { theme } from './components/Styles/theme'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Styleguide from './Styleguide'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+  },
+  {
+    path: '/styleguide',
+    element: <Styleguide />,
+  },
+])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <React.StrictMode>
-        <ThemeProvider theme={theme}>
-            <GlobalStyles />
-            <App />
-        </ThemeProvider>
-    </React.StrictMode>,
-);
+  <ThemeProvider theme={theme}>
+    <GlobalStyles />
+    <RouterProvider router={router} />
+  </ThemeProvider>
+)
