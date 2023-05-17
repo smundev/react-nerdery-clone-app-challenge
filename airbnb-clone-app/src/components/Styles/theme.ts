@@ -1,0 +1,41 @@
+export const theme = {
+  colors: {
+    body: '#FFFFFF',
+    'header-bg': '#FFFFFF',
+    'header-text': '#000',
+    'body-bg': '#FFFFFF',
+    'body-text': '#000',
+    'normal-text': '#000000',
+    footer: '#676767',
+    'primary-01': '#F6475F',
+    'primary-02': '#FF385C',
+    'neutral-01': '#F7F7F7',
+    'neutral-02': '#EBEBEB',
+    'neutral-03': '#DDDDDD',
+    'neutral-04': '#D3D3D3',
+    'neutral-05': '#C2C2C2',
+    'neutral-06': '#B0B0B0',
+    'neutral-07': '#717171',
+    'neutral-08': '#5E5E5E',
+    'error-01': '#FEF8F6',
+    'error-02': '#C13515',
+    'accent-01': '#F6D7DF',
+    'accent-02': '#D03660',
+    discount: '#008A05',
+    link: '#004CC4',
+  },
+  shades: {
+    'shade-01': '#FFFFFF',
+    'shade-02': '#222222',
+    'shade-02-5': 'rgba(34, 34, 34, 0.05)',
+    'shade-02-30': 'rgba(34, 34, 34, 0.3)',
+  },
+  gradients: {
+    'gradient-01':
+      'radial-gradient(100% 12158.24% at 99.42% 0%,#EB4C60 0%, #EB4C60 48.44%, #EB4C60 100%) ,radial-gradient(100% 12158.24% at 99.42% 0%,#C72D65 0%, #D23760 48.44%, #D23755 100%) ,radial-gradient(100% 12158.24% at 99.42% 0%,#C72D65 0%, #D23760 48.44%, #D23755 100%)',
+    'gradient-02':
+      'radial-gradient(103.95% 1413.54% at -3.95% 100%, #D33753 0%, #D13660 52.83%, #C72D65 100%)',
+    'gradient-03':
+      'radial-gradient(100% 12158.24% at 99.42% 0%, #C72D65 0%, #D23760 48.44%, #D23755 100%), radial-gradient(100% 12158.24% at 99.42% 0%, #C72D65 0%, #D23760 48.44%, #D23755 100%)',
+  },
+}
