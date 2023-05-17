@@ -12,7 +12,8 @@ export const StyledCard = styled.div<StyledCardProps>`
   flex: 0 0 auto;
   gap: 12px;
   margin-right: 32px;
-  height: 100%;
+  box-sizing: border-box;
+  transition: border-bottom 0.1s ease-in-out;
 
   color: ${(props) =>
     props.isSelected
@@ -22,7 +23,7 @@ export const StyledCard = styled.div<StyledCardProps>`
     props.isSelected
       ? `2px solid ${props.theme.colors['normal-text']}`
       : 'none'};
-  transition: all 0.1s ease;
+
   &:hover {
     cursor: pointer;
     color: ${(props) => props.theme.colors['normal-text']};

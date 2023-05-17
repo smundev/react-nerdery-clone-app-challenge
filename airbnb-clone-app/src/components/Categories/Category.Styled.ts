@@ -22,7 +22,9 @@ export const StyledCategory = styled.div<Props>`
 
   @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
     padding: 0;
-    margin-top: 45px;
+    margin-top: 0;
+    padding: 0;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
     button {
       display: none;
     }
