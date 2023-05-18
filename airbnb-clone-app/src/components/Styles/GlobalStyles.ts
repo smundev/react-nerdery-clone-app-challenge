@@ -12,7 +12,7 @@ body{
     font-family: Airbnb Cereal, sans-serif;
     width: 100%;
     height: 100vh;
-    font-size: 14px;
+    font-size: ${({ theme }) => theme.sizes['font-size-m']};
     line-height: 1.43;
     color: #222;
     background-color: #fff;
