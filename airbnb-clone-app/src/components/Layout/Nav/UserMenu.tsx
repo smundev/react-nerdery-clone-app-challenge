@@ -4,10 +4,11 @@ import {
   FloatingMenuItem,
   FloatingMenuWrapper,
 } from '../../Common/FloatingMenu.styled'
-import { useToggle } from '../../hooks/useToggle'
-import { useClickedOutside } from '../../hooks/useClickedOutside'
+import { useToggle } from '../../../hooks/useToggle'
+import { useClickedOutside } from '../../../hooks/useClickedOutside'
 import { useEffect } from 'react'
 import { Login } from '../../Auth/Login'
+import { Signup } from '../../Auth/Signup'
 
 const MENU_OPTIONS = {
   LOGIN: Symbol('login'),
@@ -21,7 +22,8 @@ export const UserMenu = () => {
   const [clickedOutside, componentRef] = useClickedOutside({
     dependencies: [isExpanded],
   })
-  const [openModal, , LoginForm] = Login()
+  const [loginModal, , LoginForm] = Login()
+  const [signupModal, , SignUpForm] = Signup()
 
   useEffect(() => {
     if (isExpanded && clickedOutside) {
@@ -34,8 +36,19 @@ export const UserMenu = () => {
   }
 
   const handleClick = (option: Symbol) => {
-    if (option === MENU_OPTIONS.LOGIN) {
-      openModal()
+    switch (option) {
+      case MENU_OPTIONS.LOGIN:
+        loginModal()
+        break
+      case MENU_OPTIONS.SIGN_UP:
+        signupModal()
+        break
+      case MENU_OPTIONS.BECOME_HOST:
+        break
+      case MENU_OPTIONS.HELP:
+        break
+      default:
+        break
     }
   }
 
@@ -70,6 +83,7 @@ export const UserMenu = () => {
         </FloatingMenuWrapper>
       </StyledUserMenu>
       {LoginForm()}
+      {SignUpForm()}
     </>
   )
 }
