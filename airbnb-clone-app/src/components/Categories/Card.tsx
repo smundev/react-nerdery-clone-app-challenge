@@ -4,22 +4,16 @@ import { StyledCard } from './Card.styled'
 export type CategoryType = {
   label: string
   icon: IconType
-  selected?: string
+  selected?: boolean
 }
 
 export const Card: React.FC<CategoryType> = ({
   label,
-  selected = 'false',
+  selected = false,
   icon: Icon,
 }) => {
   return (
-    <StyledCard
-      to={{
-        pathname: '/',
-        search: `?q=${label}`,
-      }}
-      isselected={selected}
-    >
+    <StyledCard isSelected={selected}>
       <Icon size={26} />
       {label}
     </StyledCard>

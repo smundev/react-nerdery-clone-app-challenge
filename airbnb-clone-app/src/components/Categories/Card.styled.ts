@@ -1,13 +1,12 @@
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+
 type StyledCardProps = {
-  isselected: string
+  isSelected: boolean
 }
 
-export const StyledCard = styled(Link)<StyledCardProps>`
+export const StyledCard = styled.div<StyledCardProps>`
   display: flex;
   flex-direction: column;
-  text-decoration: none;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
@@ -17,11 +16,11 @@ export const StyledCard = styled(Link)<StyledCardProps>`
   transition: border-bottom 0.1s ease-in-out;
 
   color: ${(props) =>
-    props.isselected === 'true'
+    props.isSelected
       ? props.theme.colors['normal-text']
       : props.theme.colors['neutral-07']};
   border-bottom: ${(props) =>
-    props.isselected === 'true'
+    props.isSelected
       ? `2px solid ${props.theme.colors['normal-text']}`
       : 'none'};
   &:hover {

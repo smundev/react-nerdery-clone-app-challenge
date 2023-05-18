@@ -67,52 +67,30 @@ export const SearchButtonWrapper = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
   border-radius: 500px;
   transition: all 0.2s ease-out;
-`
 
-export const SearchOption = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 8px 8px 8px 18px;
-  border-radius: 500px;
-  font-size: ${({ theme }) => theme.sizes['font-size-s']};
-  font-weight: ${({ theme }) => theme.sizes['font-weight-bold']};
-  cursor: pointer;
+  div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 8px 8px 8px 18px;
+    border-radius: 500px;
+    font-size: ${({ theme }) => theme.sizes['font-size-s']};
+    font-weight: ${({ theme }) => theme.sizes['font-weight-bold']};
+    cursor: pointer;
 
-  input {
-    border: none;
-    background-color: transparent;
-    font-size: ${({ theme }) => theme.sizes['font-size-m']};
-    color: ${({ theme }) => theme.colors['neutral-07']};
-    font-weight: ${({ theme }) => theme.sizes['font-weight-regular']};
+    input {
+      border: none;
+      background-color: transparent;
+      font-size: ${({ theme }) => theme.sizes['font-size-m']};
+      color: ${({ theme }) => theme.colors['neutral-07']};
+      font-weight: ${({ theme }) => theme.sizes['font-weight-regular']};
 
+      &:hover {
+        background-color: ${(props) => props.theme.colors['neutral-03']};
+      }
+    }
     &:hover {
       background-color: ${(props) => props.theme.colors['neutral-03']};
-    }
-  }
-  &:hover {
-    background-color: ${(props) => props.theme.colors['neutral-03']};
-  }
-`
-
-export const WhereWrapper = styled.div`
-  position: relative;
-`
-export const CountriesWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 406px;
-  flex-wrap: wrap;
-  padding: 25px;
-  gap: 16px;
-  div {
-    img {
-      border-radius: 16px;
-      border: 1px solid ${({ theme }) => theme.colors['neutral-03']};
-      &:hover {
-        cursor: pointer;
-        border: 1px solid black;
-      }
     }
   }
 `
