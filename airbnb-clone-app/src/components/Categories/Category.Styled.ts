@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-// prop show shado bool
 type Props = {
   showShadow?: boolean
 }
@@ -10,7 +9,7 @@ export const StyledCategory = styled.div<Props>`
   gap: 24px;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 5px;
   padding: 0.8rem 2rem 1px;
   width: auto;
   height: 100%;
