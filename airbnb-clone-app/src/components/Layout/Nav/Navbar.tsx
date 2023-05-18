@@ -11,12 +11,12 @@ import { StyledLogo, StyledNavbar } from './StyledNavbar.styled'
 
 import { FiSearch } from 'react-icons/fi'
 import { RiEqualizerLine } from 'react-icons/ri'
-import { useToggle } from '../../hooks/useToggle'
+import { useToggle } from '../../../hooks/useToggle'
 import { useEffect, useState } from 'react'
 import { Flex } from '../../Common/Flex.styled'
 import { StickyWrapper } from '../../Common/StickyWrapper'
 import { UserMenu } from './UserMenu'
-import { useClickedOutside } from '../../hooks/useClickedOutside'
+import { useClickedOutside } from '../../../hooks/useClickedOutside'
 
 const SEARCH_CRITERIA = {
   ANYWHERE: 'ANY',
