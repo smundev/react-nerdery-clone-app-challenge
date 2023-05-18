@@ -3,6 +3,7 @@ import styled from 'styled-components'
 type Props = {
   direction?: string
   gap?: string
+  backgroundColor?: string
 }
 
 export const Flex = styled.div<Props>`
@@ -11,4 +12,6 @@ export const Flex = styled.div<Props>`
   gap: ${(props) => props.gap || '0'};
   flex: 1;
   flex-wrap: wrap;
+  background-color: ${(props) =>
+    props.backgroundColor || props.theme.colors.body};
 `

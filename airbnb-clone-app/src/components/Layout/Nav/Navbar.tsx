@@ -7,19 +7,16 @@ import {
   StyledExpandedSearch,
 } from './ExpandedNavbar.styled'
 import { BecomeHost, Navigation, StyledFilter } from './StyledNavbar.styled'
-import {
-  StyledAvatar,
-  StyledLogo,
-  StyledNavbar,
-  StyledUserMenu,
-} from './StyledNavbar.styled'
-import { BiMenu } from 'react-icons/bi'
+import { StyledLogo, StyledNavbar } from './StyledNavbar.styled'
+
 import { FiSearch } from 'react-icons/fi'
 import { RiEqualizerLine } from 'react-icons/ri'
-import { useToggle } from '../../../hooks/useToggle'
-import { useEffect, useRef, useState } from 'react'
+import { useToggle } from '../../hooks/useToggle'
+import { useEffect, useState } from 'react'
 import { Flex } from '../../Common/Flex.styled'
 import { StickyWrapper } from '../../Common/StickyWrapper'
+import { UserMenu } from './UserMenu'
+import { useClickedOutside } from '../../hooks/useClickedOutside'
 
 const SEARCH_CRITERIA = {
   ANYWHERE: 'ANY',
@@ -30,37 +27,28 @@ const SEARCH_CRITERIA = {
 export const Navbar = () => {
   const [isExpanded, toggleIsExpanded] = useToggle(false)
   const [activeSearch, setActiveSearch] = useState('')
-  const componentRef = useRef<HTMLDivElement>(null)
+  const [clickedOutside, componentRef] = useClickedOutside({
+    dependencies: [isExpanded],
+  })
 
   const handleSearch = (tab: string) => {
-    toggleIsExpanded()
-    setActiveSearch(tab)
-  }
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      componentRef.current &&
-      !componentRef.current.contains(event.target as Node | null)
-    ) {
-      if (isExpanded) {
-        toggleIsExpanded()
-        setActiveSearch('')
-      }
+    if (!isExpanded) {
+      toggleIsExpanded()
+      setActiveSearch(tab)
     }
   }
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside)
+    if (isExpanded && clickedOutside) {
+      toggleIsExpanded()
+      setActiveSearch('')
     }
-  }, [isExpanded])
+  }, [clickedOutside])
 
   return (
-    <StickyWrapper>
+    <StickyWrapper zIndex={2} ref={componentRef}>
       <Flex direction="column" gap="15px">
-        <StyledNavbar ref={componentRef}>
+        <StyledNavbar visible={isExpanded}>
           <StyledLogo />
           <Navigation visible={!isExpanded}>
             <div>
@@ -110,10 +98,7 @@ export const Navbar = () => {
               <Globe />
             </button>
           </BecomeHost>
-          <StyledUserMenu>
-            <BiMenu fontSize="1.5em" />
-            <StyledAvatar />
-          </StyledUserMenu>
+          <UserMenu />
         </StyledNavbar>
         <StyledExpandedSearch visible={isExpanded} tab={activeSearch}>
           <SearchButtonWrapper>

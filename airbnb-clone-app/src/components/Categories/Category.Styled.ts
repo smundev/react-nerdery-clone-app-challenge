@@ -15,6 +15,8 @@ export const StyledCategory = styled.div<Props>`
   width: auto;
   height: 100%;
   background-color: #fff;
+  z-index: 1;
+
   box-shadow: ${({ showShadow }) =>
     !showShadow ? '0px 4px 4px rgba(0, 0, 0, 0.1)' : 'none'};
 
