@@ -1,7 +1,7 @@
 import { Categories } from './components/Categories/Categories'
-import { Flex } from './components/Styles/Common/Flex.styled'
+import { Flex } from './components/Common/Flex.styled'
 
-import { Navbar } from './components/Styles/Layout/Nav/Navbar'
+import { Navbar } from './components/Layout/Nav/Navbar'
 
 function Styleguide() {
   return (

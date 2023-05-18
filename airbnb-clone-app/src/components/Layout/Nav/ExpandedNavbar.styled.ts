@@ -14,6 +14,11 @@ export const StyledExpandedNavbar = styled.div<Props>`
   height: 100%;
   gap: 16px;
 
+  @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
+    display: none;
+    margin: 0;
+  }
+
   button {
     display: flex;
     border: none;
@@ -43,12 +48,19 @@ export const StyledExpandedSearch = styled.div<Props>`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  background-color: ${({ theme }) => theme.colors.body};
+  flex: 1;
+
+  @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
+    display: none;
+    margin: 0 0 1rem;
+  }
 `
 
 export const SearchButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  flex-grow: 0.5;
+  flex-grow: 0.2;
 
   background: ${({ theme }) => theme.colors.body};
   border: 1px solid ${({ theme }) => theme.colors['neutral-03']};
