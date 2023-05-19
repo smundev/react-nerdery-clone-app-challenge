@@ -31,6 +31,18 @@ export const UserMenu = () => {
     }
   }, [clickedOutside])
 
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isExpanded) {
+        toggleIsExpanded()
+      }
+    }
+    window.addEventListener('keydown', handleEsc)
+    return () => {
+      window.removeEventListener('keydown', handleEsc)
+    }
+  }, [isExpanded])
+
   const handleExpand = () => {
     toggleIsExpanded()
   }
@@ -61,7 +73,12 @@ export const UserMenu = () => {
       >
         <BiMenu fontSize="1.5em" />
         <StyledAvatar />
-        <FloatingMenuWrapper width={'223px'} expanded={isExpanded}>
+        <FloatingMenuWrapper
+          width={'223px'}
+          expanded={isExpanded}
+          right="0"
+          margin="20px 20px"
+        >
           <FloatingMenuItem
             fontWeight="font-weight-bold"
             onClick={() => handleClick(MENU_OPTIONS.LOGIN)}
