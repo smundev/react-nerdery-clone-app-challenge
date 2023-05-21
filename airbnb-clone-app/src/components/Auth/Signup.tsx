@@ -6,17 +6,27 @@ import {
   InputGroup,
   Separator,
   StyledCheckbox,
+  StyledDateInput,
   StyledInput,
+  StyledInputError,
 } from '../Common/Input.styled'
 import { StyledLabel } from '../Common/Typography.styled'
+import { Controller, useForm } from 'react-hook-form'
+import { MdError } from 'react-icons/md'
+import ReactDatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export const Signup = () => {
   const [modalOpen, setModalOpen] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [birthDate, setBirthDate] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm()
+
+  const onSubmit = handleSubmit((data) => console.log(data))
 
   const openModal = () => {
     setModalOpen(true)
@@ -24,45 +34,68 @@ export const Signup = () => {
 
   const closeModal = () => {
     setModalOpen(false)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Form submitted:', name, email, password, birthDate)
+    reset
   }
 
   const SignUpForm = () => {
     return (
       <Modal isOpen={modalOpen} onClose={closeModal} title="Sign up">
         <Flex direction="column">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={onSubmit}>
             <Flex direction="column" gap="15px">
               <InputGroup>
                 <StyledInput
                   type="text"
-                  value={firstName}
                   placeholder="First Name"
-                  onChange={(e) => setFirstName(e.target.value)}
+                  {...register('firstName', { required: true })}
+                  hasError={Boolean(errors.firstName)}
                 />
+                {errors.firstName && (
+                  <StyledInputError>
+                    <MdError size={16} /> Name is required
+                  </StyledInputError>
+                )}
                 <Separator />
                 <StyledInput
                   type="text"
-                  value={lastName}
                   placeholder="Last Name"
-                  onChange={(e) => setLastName(e.target.value)}
+                  {...register('lastName', { required: true })}
+                  hasError={Boolean(errors.lastName)}
                 />
+                {errors.lastName && (
+                  <StyledInputError>
+                    <MdError size={16} /> Last name is required
+                  </StyledInputError>
+                )}
               </InputGroup>
               <StyledLabel color="neutral-07" size="font-size-s">
                 Make sure it matches the name on your government ID.
               </StyledLabel>
 
-              <StyledInput
-                type="text"
-                value={lastName}
-                placeholder="Birthdate"
-                onChange={(e) => setBirthDate(e.target.value)}
-                border={true}
+              <Controller
+                control={control}
+                name="birthdate"
+                render={({ field: { onChange, value }, formState }) => (
+                  <>
+                    <ReactDatePicker
+                      selected={value}
+                      onChange={onChange}
+                      className="react-datepicker-wrapper"
+                      placeholderText="Select date"
+                    />
+                    <StyledDateInput
+                      hasError={Boolean(formState.errors.birthdate)}
+                    />
+                  </>
+                )}
+                rules={{ required: true }}
               />
+
+              {errors.birthdate && (
+                <StyledInputError>
+                  <MdError size={16} /> Birthdate is required
+                </StyledInputError>
+              )}
               <StyledLabel color="neutral-07" size="font-size-s">
                 To sign up, you need to be at least 18. Your birthday won’t be
                 shared with other people who use Airbnb.
@@ -70,22 +103,35 @@ export const Signup = () => {
 
               <StyledInput
                 type="email"
-                value={email}
                 placeholder="Email address"
-                onChange={(e) => setEmail(e.target.value)}
+                {...register('email', {
+                  required: true,
+                  pattern: /^\S+@\S+$/i,
+                })}
+                hasError={Boolean(errors.email)}
                 border={true}
               />
+              {errors.email && (
+                <StyledInputError>
+                  <MdError size={16} /> Invalid email or format
+                </StyledInputError>
+              )}
               <StyledLabel color="neutral-07" size="font-size-s">
                 We'll email you trip confirmations and receipts.
               </StyledLabel>
 
               <StyledInput
                 type="password"
-                value={password}
                 placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
+                {...register('password', { required: true })}
+                hasError={Boolean(errors.password)}
                 border={true}
               />
+              {errors.password && (
+                <StyledInputError>
+                  <MdError size={16} /> Password is required
+                </StyledInputError>
+              )}
               <StyledLabel size="font-size-m">
                 By selecting <strong>Agree and continue</strong>, I agree to
                 Airbnb’s
@@ -105,7 +151,7 @@ export const Signup = () => {
               </StyledLabel>
 
               <Flex>
-                <StyledCheckbox />
+                <StyledCheckbox {...register('agreement')} />
                 <StyledLabel color="neutral-08" size="font-size-s">
                   I don't want to receive marketing messages from Airbnb.
                 </StyledLabel>
