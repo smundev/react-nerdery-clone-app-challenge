@@ -1,13 +1,25 @@
 import { useState } from 'react'
 import Modal from '../Common/Modal'
 import { Flex } from '../Common/Flex.styled'
-import { InputGroup, Separator, StyledInput } from '../Common/Input.styled'
+import {
+  InputGroup,
+  Separator,
+  StyledInput,
+  StyledInputError,
+} from '../Common/Input.styled'
 import { PrimaryButton } from '../Common/Button.styled'
+import { useForm } from 'react-hook-form'
+import { MdError } from 'react-icons/md'
 
 export const Login = () => {
   const [modalOpen, setModalOpen] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm()
+  const onSubmit = handleSubmit((data) => console.log(data))
 
   const openModal = () => {
     setModalOpen(true)
@@ -15,34 +27,44 @@ export const Login = () => {
 
   const closeModal = () => {
     setModalOpen(false)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Form submitted:', name, email, password)
+    reset()
   }
 
   const LoginForm = () => {
     return (
       <Modal isOpen={modalOpen} onClose={closeModal} title="Log in">
         <Flex direction="column">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={onSubmit}>
             <Flex direction="column" gap="15px">
               <h2>Welcome to Airbnb</h2>
               <InputGroup>
                 <StyledInput
                   type="email"
-                  value={email}
                   placeholder="Email address"
-                  onChange={(e) => setEmail(e.target.value)}
+                  {...register('email', {
+                    required: true,
+                    pattern: /^\S+@\S+$/i,
+                  })}
+                  hasError={Boolean(errors.email)}
                 />
+                {errors.email && (
+                  <StyledInputError>
+                    <MdError size={16} /> Invalid email or format
+                  </StyledInputError>
+                )}
                 <Separator />
                 <StyledInput
                   type="password"
-                  value={password}
                   placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  {...register('password', { required: true })}
+                  hasError={Boolean(errors.password)}
                 />
+                {errors.password && (
+                  <StyledInputError>
+                    <MdError size={16} />
+                    Password is required
+                  </StyledInputError>
+                )}
               </InputGroup>
               <PrimaryButton type="submit">Agree and continue</PrimaryButton>
             </Flex>
