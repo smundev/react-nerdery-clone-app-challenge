@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useAuthContext } from '../../context/AuthContext'
 import Modal from '../Common/Modal'
 import { PrimaryButton } from '../Common/Button.styled'
 import { Flex } from '../Common/Flex.styled'
@@ -19,6 +20,12 @@ import 'react-datepicker/dist/react-datepicker.css'
 export const Signup = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const {
+    user,
+    register: signIn,
+    error: signupErrors,
+    clearErrors,
+  } = useAuthContext()
+  const {
     register,
     handleSubmit,
     control,
@@ -26,7 +33,22 @@ export const Signup = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = handleSubmit((data) => console.log(data))
+  const onSubmit = handleSubmit((data) => {
+    signIn({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+      birthdate: data.birthdate,
+      agreement: data.agreement,
+    })
+  })
+
+  useEffect(() => {
+    if (!signupErrors) {
+      closeModal()
+    }
+  }, [user])
 
   const openModal = () => {
     setModalOpen(true)
@@ -34,7 +56,8 @@ export const Signup = () => {
 
   const closeModal = () => {
     setModalOpen(false)
-    reset
+    clearErrors()
+    reset()
   }
 
   const SignUpForm = () => {
@@ -140,7 +163,9 @@ export const Signup = () => {
                 <a href="#"> Nondiscrimination Policy</a> and acknowledge the
                 <a href="#"> Privacy Policy</a>.
               </StyledLabel>
-
+              <StyledInputError fontSize="font-size-m">
+                {signupErrors}
+              </StyledInputError>
               <PrimaryButton type="submit">Agree and continue</PrimaryButton>
               <Separator />
               <StyledLabel color="neutral-08" size="font-size-s">

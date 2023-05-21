@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '../Common/Modal'
 import { Flex } from '../Common/Flex.styled'
 import {
@@ -10,16 +10,28 @@ import {
 import { PrimaryButton } from '../Common/Button.styled'
 import { useForm } from 'react-hook-form'
 import { MdError } from 'react-icons/md'
+import { useAuthContext } from '../../context/AuthContext'
 
 export const Login = () => {
   const [modalOpen, setModalOpen] = useState(false)
+  const { user, signIn, error: loginErrors, clearErrors } = useAuthContext()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm()
-  const onSubmit = handleSubmit((data) => console.log(data))
+
+  const onSubmit = handleSubmit((data) => {
+    signIn(data.email, data.password)
+  })
+
+  useEffect(() => {
+    if (!loginErrors) {
+      closeModal()
+    }
+  }, [user])
 
   const openModal = () => {
     setModalOpen(true)
@@ -27,6 +39,7 @@ export const Login = () => {
 
   const closeModal = () => {
     setModalOpen(false)
+    clearErrors()
     reset()
   }
 
@@ -66,6 +79,9 @@ export const Login = () => {
                   </StyledInputError>
                 )}
               </InputGroup>
+              <StyledInputError fontSize="font-size-m">
+                {loginErrors}
+              </StyledInputError>
               <PrimaryButton type="submit">Agree and continue</PrimaryButton>
             </Flex>
           </form>
