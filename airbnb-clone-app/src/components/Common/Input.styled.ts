@@ -5,6 +5,10 @@ type InputProps = {
   hasError?: boolean
 }
 
+type ErrorProps = {
+  fontSize?: string
+}
+
 export const StyledInput = styled.input<InputProps>`
   padding: 5px;
   border-radius: 8px;
@@ -19,10 +23,10 @@ export const StyledInput = styled.input<InputProps>`
       : 'none'};
 `
 
-export const StyledInputError = styled.span`
+export const StyledInputError = styled.span<ErrorProps>`
   display: flex;
   align-items: center;
-  font-size: ${({ theme }) => theme.sizes['font-size-s']};
+  font-size: ${({ theme, fontSize }) => theme.sizes[fontSize || 'font-size-s']};
   color: ${({ theme }) => theme.colors['error-01']};
 `
 
