@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import * as fs from 'fs'
 
-import { FakeListing } from './types'
+import { Listing } from '../listing/types'
 
 export const property_types = [
   'Beachfront',
@@ -97,7 +97,7 @@ export const languages = [
 
 export const house_rules = ['No smoking', 'No pets', 'No parties or events']
 
-const generateFakeListing = (): FakeListing => ({
+const generateFakeListing = (): Listing => ({
   id: faker.string.uuid(),
   listing_url: faker.internet.url(),
   name: faker.person.fullName(),
@@ -121,13 +121,14 @@ const generateFakeListing = (): FakeListing => ({
   cleaning_fee: faker.number.float({ min: 20, max: 100, precision: 0.01 }),
   extra_people: faker.number.float({ min: 10, max: 50, precision: 0.01 }),
   guests_included: faker.number.float({ min: 1, max: 10 }),
+  rating: faker.number.float({ min: 1, max: 5, precision: 0.1 }),
   images: [
-    {
-      thumbnail_url: faker.image.urlLoremFlickr({ category: 'city' }),
-      medium_url: faker.image.urlLoremFlickr({ category: 'city' }),
-      picture_url: faker.image.urlLoremFlickr({ category: 'city' }),
-      xl_picture_url: faker.image.urlLoremFlickr({ category: 'city' }),
-    },
+    faker.image.urlLoremFlickr({ category: 'city' }),
+    faker.image.urlLoremFlickr({ category: 'city' }),
+    faker.image.urlLoremFlickr({ category: 'city' }),
+    faker.image.urlLoremFlickr({ category: 'city' }),
+    faker.image.urlLoremFlickr({ category: 'city' }),
+    faker.image.urlLoremFlickr({ category: 'city' }),
   ],
   address: {
     street: faker.location.streetAddress(),
@@ -216,10 +217,10 @@ const generateFakeListing = (): FakeListing => ({
   },
 })
 
-const randomListing: FakeListing[] = Array.from(
-  { length: 10 },
-  generateFakeListing
-)
+const randomListing: Listing[] = Array.from({ length: 50 }, generateFakeListing)
 
-fs.writeFileSync('db.json', JSON.stringify(randomListing, null, 2))
-console.log(`Listing data saved to db.json`)
+fs.writeFileSync(
+  'src/api/data/listing.json',
+  JSON.stringify(randomListing, null, 2)
+)
+console.log(`Listing data saved to listing.json`)
