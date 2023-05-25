@@ -217,7 +217,10 @@ const generateFakeListing = (): Listing => ({
   },
 })
 
-const randomListing: Listing[] = Array.from({ length: 50 }, generateFakeListing)
+const randomListing: Listing[] = Array.from(
+  { length: 200 },
+  generateFakeListing
+)
 
 fs.writeFileSync(
   'src/api/data/listing.json',
