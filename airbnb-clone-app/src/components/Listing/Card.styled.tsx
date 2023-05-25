@@ -5,6 +5,7 @@ export const StyledCard = styled.div`
   width: 305px;
   height: auto;
   gap: 1rem;
+  z-index: 0;
 
   .carousel-slider {
     border-radius: 12px;

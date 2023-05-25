@@ -23,9 +23,9 @@ export const useInfiniteScroll = ({ loading, hasMore }: Props) => {
     [loading, hasMore]
   )
 
-  const reset = () => {
+  const resetPage = () => {
     setPage(1)
   }
 
-  return { page, objectRef, reset }
+  return { page, objectRef, resetPage }
 }
