@@ -21,6 +21,7 @@ import { StickyWrapper } from '../../Common/StickyWrapper'
 import { UserMenu } from './UserMenu'
 import { useClickedOutside } from '../../../hooks/useClickedOutside'
 import { FloatingMenuWrapper } from '../../Common/FloatingMenu.styled'
+import { Link } from 'react-router-dom'
 
 const SEARCH_CRITERIA = {
   ANYWHERE: 'ANY',
@@ -72,7 +73,13 @@ export const Navbar = () => {
     <StickyWrapper zIndex={2} ref={componentRef}>
       <Flex direction="column" gap="15px">
         <StyledNavbar visible={isExpanded}>
-          <StyledLogo />
+          <Link
+            to={{
+              pathname: '/',
+            }}
+          >
+            <StyledLogo />
+          </Link>
           <Navigation visible={!isExpanded}>
             <div>
               <FiSearch />
