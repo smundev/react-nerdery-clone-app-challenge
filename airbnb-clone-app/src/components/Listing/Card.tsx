@@ -8,6 +8,8 @@ import {
 import { AiFillStar } from 'react-icons/ai'
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 type CardProps = {
   title: string
@@ -24,7 +26,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <>
         <StyledCard ref={ref}>
           <Carousel
-            showIndicators={false}
+            showIndicators={true}
             infiniteLoop={true}
             showStatus={false}
             showThumbs={false}
@@ -55,4 +57,31 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       </>
     )
   }
+)
+
+export const SkeletonCard = () => (
+  <StyledCard>
+    <ImageWrapper>
+      <Skeleton height={'100%'} width={305} />
+    </ImageWrapper>
+
+    <CardSection>
+      <header>
+        <strong>
+          <Skeleton width={150} />
+        </strong>
+        <strong>
+          <Skeleton width={30} />
+        </strong>
+      </header>
+      <label>
+        <Skeleton width={200} />
+      </label>
+      <span>
+        <strong>
+          <Skeleton width={80} />
+        </strong>
+      </span>
+    </CardSection>
+  </StyledCard>
 )

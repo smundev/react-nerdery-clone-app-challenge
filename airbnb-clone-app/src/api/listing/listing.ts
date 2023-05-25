@@ -10,8 +10,12 @@ export const getAll = async () => {
   return data
 }
 
-export const getPage = async (page: number) => {
-  const { data } = (await axios.get(`${baseUrl}/listing?_page=${page}`)) as {
+export const getPage = async (page: number, query: string) => {
+  const { data } = (await axios.get(`${baseUrl}/listing${
+    query ? `${query}&` : '?'
+  }_page=${page}
+  
+  `)) as {
     data: Listing[]
   }
   return data

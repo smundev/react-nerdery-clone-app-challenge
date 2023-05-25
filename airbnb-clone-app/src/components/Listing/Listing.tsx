@@ -1,14 +1,15 @@
-import { Card } from './Card'
-import { Skeleton } from './Skeleton'
+import { Card, SkeletonCard } from './Card'
 import { useListing } from '../../hooks/useListing'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
+import { useLocation } from 'react-router-dom'
 
 const ListingContainer = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  flex: 1;
   gap: 1rem;
   margin: 24px;
   flex-wrap: wrap;
@@ -19,12 +20,18 @@ const ListingContainer = styled.section`
 `
 
 export const Listing = () => {
-  const { data, loading, hasMore, getPageListing } = useListing()
-  const { page, objectRef } = useInfiniteScroll({ hasMore, loading })
+  const { data, loading, hasMore, getPageListing, resetData } = useListing()
+  const { page, objectRef, resetPage } = useInfiniteScroll({ hasMore, loading })
+  const { search } = useLocation()
 
   useEffect(() => {
-    getPageListing(page)
-  }, [page])
+    resetData()
+    resetPage()
+  }, [search])
+
+  useEffect(() => {
+    getPageListing(page, search)
+  }, [page, search])
 
   return (
     <>
@@ -55,6 +62,13 @@ export const Listing = () => {
             />
           )
         })}
+        {loading &&
+          Array.from(Array(10).keys()).map((_, index) => (
+            <SkeletonCard key={index} />
+          ))}
+        {!loading && data.length === 0 && (
+          <h3>No listings found for this category</h3>
+        )}
       </ListingContainer>
     </>
   )

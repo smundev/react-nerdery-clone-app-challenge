@@ -6,9 +6,14 @@ import { StyledCategory } from './Category.Styled'
 import { categories } from './catalog'
 import { StickyWrapper } from '../Common/StickyWrapper'
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 export const Categories = () => {
   const [verticalScroll, setVerticalScroll] = useState(0)
+
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const paramValue = queryParams.get('q')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -23,7 +28,14 @@ export const Categories = () => {
       <StyledCategory showShadow={verticalScroll <= 50}>
         <ScrollContainer>
           {categories.map((item, i) => {
-            return <Card key={i} label={item.label} icon={item.icon} />
+            return (
+              <Card
+                key={i}
+                label={item.label}
+                icon={item.icon}
+                selected={paramValue === item.label ? 'true' : 'false'}
+              />
+            )
           })}
         </ScrollContainer>
         <SecondaryButton fontWeight="bold">

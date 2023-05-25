@@ -24,10 +24,10 @@ export const useListing = () => {
     }
   }
 
-  const getPageListing = async (page: number) => {
+  const getPageListing = async (page: number, query: string) => {
     try {
       setLoading(true)
-      const fetchData = await getPage(page)
+      const fetchData = await getPage(page, query)
       setData((prevData) => [...prevData, ...fetchData])
       setHasMore(fetchData.length > 0)
       setLoading(false)
@@ -40,5 +40,20 @@ export const useListing = () => {
     }
   }
 
-  return { data, loading, error, hasMore, getAllListing, getPageListing }
+  const resetData = () => {
+    setData([])
+    setLoading(false)
+    setError(null)
+    setHasMore(false)
+  }
+
+  return {
+    data,
+    loading,
+    error,
+    hasMore,
+    getAllListing,
+    getPageListing,
+    resetData,
+  }
 }
