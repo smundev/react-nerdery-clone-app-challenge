@@ -7,6 +7,10 @@ export const StyledCard = styled.div`
   gap: 1rem;
   z-index: 0;
 
+  @media (max-width: 688px) {
+    width: 525px;
+  }
+
   .carousel-slider {
     border-radius: 12px;
   }

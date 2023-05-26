@@ -1,10 +1,9 @@
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 type StyledCardProps = {
   isselected: string
 }
 
-export const StyledCard = styled(Link)<StyledCardProps>`
+export const StyledCard = styled.div<StyledCardProps>`
   display: flex;
   flex-direction: column;
   text-decoration: none;

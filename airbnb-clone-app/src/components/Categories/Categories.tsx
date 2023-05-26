@@ -6,14 +6,12 @@ import { StyledCategory } from './Category.Styled'
 import { categories } from './catalog'
 import { StickyWrapper } from '../Common/StickyWrapper'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
 export const Categories = () => {
   const [verticalScroll, setVerticalScroll] = useState(0)
-
-  const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
-  const paramValue = queryParams.get('q')
+  const [searchParams] = useSearchParams()
+  const paramValue = searchParams.get('property_type')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

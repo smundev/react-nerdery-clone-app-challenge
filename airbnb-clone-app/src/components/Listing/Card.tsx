@@ -10,6 +10,7 @@ import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { v4 as uuidv4 } from 'uuid'
 
 type CardProps = {
   title: string
@@ -32,8 +33,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             showThumbs={false}
             transitionTime={500}
           >
-            {images.map((image, index) => (
-              <ImageWrapper key={index}>
+            {images.map((image) => (
+              <ImageWrapper key={uuidv4()}>
                 <StyledImage alt={title} src={image} />
               </ImageWrapper>
             ))}

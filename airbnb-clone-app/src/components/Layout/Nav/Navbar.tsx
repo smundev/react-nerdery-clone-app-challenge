@@ -21,7 +21,8 @@ import { StickyWrapper } from '../../Common/StickyWrapper'
 import { UserMenu } from './UserMenu'
 import { useClickedOutside } from '../../../hooks/useClickedOutside'
 import { FloatingMenuWrapper } from '../../Common/FloatingMenu.styled'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const SEARCH_CRITERIA = {
   ANYWHERE: 'ANY',
@@ -33,6 +34,9 @@ export const Navbar = () => {
   const [isExpanded, toggleIsExpanded] = useToggle(false)
   const [activeSearch, setActiveSearch] = useState('')
   const [whereOpen, toggleWhereOpen] = useToggle(false)
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const [clickedOutside, componentRef] = useClickedOutside({
     dependencies: [isExpanded],
@@ -43,6 +47,14 @@ export const Navbar = () => {
       toggleIsExpanded()
       setActiveSearch(tab)
     }
+  }
+
+  const updateSearchParams = (newParam: string) => {
+    searchParams.set('address.country_code', newParam)
+    navigate({
+      pathname: location.pathname,
+      search: searchParams.toString(),
+    })
   }
 
   useEffect(() => {
@@ -143,7 +155,10 @@ export const Navbar = () => {
                 margin="10px 10px"
               >
                 <CountriesWrapper>
-                  <Flex direction="column">
+                  <Flex
+                    direction="column"
+                    onClick={() => updateSearchParams('')}
+                  >
                     <img
                       src="/images/flexible.webp"
                       alt="paris"
@@ -152,7 +167,11 @@ export const Navbar = () => {
                     />
                     <span>I am Flexible</span>
                   </Flex>
-                  <Flex direction="column">
+
+                  <Flex
+                    direction="column"
+                    onClick={() => updateSearchParams('EU')}
+                  >
                     <img
                       src="/images/europe.webp"
                       alt="paris"
@@ -161,7 +180,11 @@ export const Navbar = () => {
                     />
                     <span>Europe</span>
                   </Flex>
-                  <Flex direction="column">
+
+                  <Flex
+                    direction="column"
+                    onClick={() => updateSearchParams('GT')}
+                  >
                     <img
                       src="/images/guatemala.webp"
                       alt="paris"
@@ -170,7 +193,11 @@ export const Navbar = () => {
                     />
                     <span>Guatemala</span>
                   </Flex>
-                  <Flex direction="column">
+
+                  <Flex
+                    direction="column"
+                    onClick={() => updateSearchParams('SA')}
+                  >
                     <img
                       src="/images/southamerica.webp"
                       alt="paris"
@@ -179,7 +206,11 @@ export const Navbar = () => {
                     />
                     <span>South America</span>
                   </Flex>
-                  <Flex direction="column">
+
+                  <Flex
+                    direction="column"
+                    onClick={() => updateSearchParams('MX')}
+                  >
                     <img
                       src="/images/mexico.webp"
                       alt="paris"
@@ -188,7 +219,11 @@ export const Navbar = () => {
                     />
                     <span>Mexico</span>
                   </Flex>
-                  <Flex direction="column">
+
+                  <Flex
+                    direction="column"
+                    onClick={() => updateSearchParams('US')}
+                  >
                     <img
                       src="/images/usa.webp"
                       alt="paris"
