@@ -1,12 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getAll, getPage } from '../api/listing/listing'
 import { Listing } from '../api/listing/types'
 
-export const useListing = () => {
+export const useListing = (queryParam: URLSearchParams) => {
   const [data, setData] = useState<Listing[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(false)
+  const page = useRef(1)
+
+  useEffect(() => {
+    resetData()
+  }, [queryParam])
 
   const getAllListing = async () => {
     try {
@@ -24,23 +29,36 @@ export const useListing = () => {
     }
   }
 
-  const getPageListing = async (page: number, query: string) => {
+  const updateCountAndPage = (
+    prevData: Array<Listing>,
+    paginatedData: Array<Listing>,
+    totalCount: number
+  ) => {
+    const hasRemainingData = prevData.length + paginatedData.length < totalCount
+    setHasMore(hasRemainingData)
+    if (hasRemainingData) page.current++
+  }
+
+  const getPageListing = async () => {
     try {
       setLoading(true)
-      const fetchData = await getPage(page, query)
-      setData((prevData) => [...prevData, ...fetchData])
-      setHasMore(fetchData.length > 0)
+      queryParam.append('_page', page.current.toString())
+      const query_filters = Object.fromEntries(queryParam.entries())
+      const [paginatedData, totalCount] = await getPage(query_filters)
+      setData((prevData) => {
+        updateCountAndPage(prevData, paginatedData, totalCount)
+        return [...prevData, ...paginatedData]
+      })
       setLoading(false)
       setError(null)
     } catch (error) {
-      setLoading(false)
       setError('An error has ocurred while trying to get the listing page')
-      setData([])
-      setHasMore(false)
+      resetData()
     }
   }
 
   const resetData = () => {
+    page.current = 1
     setData([])
     setLoading(false)
     setError(null)

@@ -95,6 +95,8 @@ export const languages = [
   'Portuguese',
 ]
 
+export const country_codes = ['US', 'MX', 'GT', 'SA']
+
 export const house_rules = ['No smoking', 'No pets', 'No parties or events']
 
 const generateFakeListing = (): Listing => ({
@@ -134,7 +136,7 @@ const generateFakeListing = (): Listing => ({
     street: faker.location.streetAddress(),
     suburb: faker.location.city(),
     country: faker.location.country(),
-    country_code: faker.location.countryCode(),
+    country_code: faker.helpers.arrayElement(country_codes),
     location: {
       type: 'Point',
       coordinates: faker.location.nearbyGPSCoordinate(),

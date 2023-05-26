@@ -1,9 +1,9 @@
 import { Card, SkeletonCard } from './Card'
 import { useListing } from '../../hooks/useListing'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
-import { useInfiniteScroll } from '../../hooks/useInfiniteScroll'
-import { useLocation } from 'react-router-dom'
+import { useObserveElement } from '../../hooks/useObserveElement'
+import { useSearchParams } from 'react-router-dom'
 
 const ListingContainer = styled.section`
   display: flex;
@@ -20,18 +20,20 @@ const ListingContainer = styled.section`
 `
 
 export const Listing = () => {
-  const { data, loading, hasMore, getPageListing, resetData } = useListing()
-  const { page, objectRef, resetPage } = useInfiniteScroll({ hasMore, loading })
-  const { search } = useLocation()
+  const [searchParams] = useSearchParams()
+  const { data, loading, getPageListing, hasMore } = useListing(searchParams)
+  const { objectVisible, objectRef } = useObserveElement({
+    loading,
+    continueObserving: hasMore,
+  })
 
   useEffect(() => {
-    resetData()
-    resetPage()
-  }, [search])
+    window.scrollTo(0, 0)
+  }, [searchParams])
 
   useEffect(() => {
-    getPageListing(page, search)
-  }, [page, search])
+    getPageListing()
+  }, [objectVisible, searchParams])
 
   return (
     <>
@@ -41,6 +43,7 @@ export const Listing = () => {
             return (
               <Card
                 key={item.id}
+                id-test={item.id}
                 title={item.address.street}
                 host={item.host.host_name}
                 hostJob={item.host.host_work_info}
@@ -53,6 +56,7 @@ export const Listing = () => {
           return (
             <Card
               key={item.id}
+              id-test={item.id}
               title={item.address.street}
               host={item.host.host_name}
               hostJob={item.host.host_work_info}
