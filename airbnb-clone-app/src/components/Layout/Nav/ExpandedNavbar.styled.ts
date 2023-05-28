@@ -49,6 +49,8 @@ export const StyledExpandedSearch = styled.div<Props>`
   justify-content: center;
   background-color: ${({ theme }) => theme.colors.body};
   flex: 1;
+  padding-bottom: 11px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
 
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -163,4 +165,18 @@ export const GuestsWrapper = styled.div`
   flex-wrap: wrap;
   padding: 25px;
   gap: 16px;
+`
+
+export const DatesWrapper = styled.div`
+  display: flex;
+  width: 450px;
+  flex-wrap: wrap;
+  padding: 25px;
+  gap: 16px;
+`
+export const ExpandedDatesWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
 `

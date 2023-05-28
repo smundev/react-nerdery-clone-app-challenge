@@ -58,7 +58,6 @@ export const Navigation = styled.div<NavigationProps>`
   border: 1px solid ${({ theme }) => theme.colors['neutral-03']};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
   border-radius: 500px;
-  transition: all 0.2s ease-out;
 
   svg {
     color: ${({ theme }) => theme.colors['primary-01']};

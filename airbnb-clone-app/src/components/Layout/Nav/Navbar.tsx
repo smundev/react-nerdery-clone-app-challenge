@@ -1,8 +1,9 @@
 import { ButtonLink } from '../../Common/Button.styled'
 import { Divider } from '../../Common/Divider.styled'
-import { Globe } from '../../Icons/Icons'
 import {
   CountriesWrapper,
+  DatesWrapper,
+  ExpandedDatesWrapper,
   ExpandedMenuWrapper,
   GuestsWrapper,
   SearchButtonWrapper,
@@ -29,6 +30,8 @@ import { IoSearchCircle } from 'react-icons/io5'
 import { Separator } from '../../Common/Input.styled'
 import { StyledAnchor, StyledLabel } from '../../Common/Typography.styled'
 import { HorizontalStep } from '../../Common/HorizontalStep'
+import ReactDatePicker from 'react-datepicker'
+import DateRangeSelector from './DateRangeSelector'
 
 const SEARCH_CRITERIA = {
   ANYWHERE: 'ANY',
@@ -56,6 +59,7 @@ export const Navbar = () => {
   const [isExpanded, toggleIsExpanded] = useToggle(false)
   const [countryMenuOpen, toggleCountryMenuOpen] = useToggle(false)
   const [guestsMenuOpen, toggleGuestsMenuOpen] = useToggle(false)
+  const [datesMenuOpen, toggleDatesMenuOpen] = useToggle(false)
   const [region, setRegion] = useState<{ label: string; code: string } | null>(
     null
   )
@@ -71,15 +75,23 @@ export const Navbar = () => {
   const [clickedOutsideAdvancedSearch, componentRef] = useClickedOutside({
     dependencies: [isExpanded],
   })
+
   const handleToggleMenu = (menu: string) => {
     switch (menu) {
       case TOGGLE_MENU_OPTIONS.COUNTRY:
         toggleCountryMenuOpen()
         if (guestsMenuOpen) toggleGuestsMenuOpen()
+        if (datesMenuOpen) toggleDatesMenuOpen()
         break
       case TOGGLE_MENU_OPTIONS.GUESTS:
         toggleGuestsMenuOpen()
         if (countryMenuOpen) toggleCountryMenuOpen()
+        if (datesMenuOpen) toggleDatesMenuOpen()
+        break
+      case TOGGLE_MENU_OPTIONS.DATES:
+        toggleDatesMenuOpen()
+        if (countryMenuOpen) toggleCountryMenuOpen()
+        if (guestsMenuOpen) toggleGuestsMenuOpen()
         break
       case TOGGLE_MENU_OPTIONS.CLOSE_ALL:
         if (guestsMenuOpen) toggleGuestsMenuOpen()
@@ -103,6 +115,7 @@ export const Navbar = () => {
     setChildren(0)
     setInfants(0)
     setPets(0)
+    if (isExpanded) toggleIsExpanded()
     navigate({
       pathname: location.pathname,
       search: '',
@@ -141,7 +154,7 @@ export const Navbar = () => {
   }, [isExpanded])
 
   useEffect(() => {
-    if (isExpanded && clickedOutsideAdvancedSearch) {
+    if (isExpanded && !datesMenuOpen && clickedOutsideAdvancedSearch) {
       toggleIsExpanded()
       handleToggleMenu(TOGGLE_MENU_OPTIONS.CLOSE_ALL)
     }
@@ -215,12 +228,15 @@ export const Navbar = () => {
             <button>Experiences</button>
             <button>Online Experiences</button>
           </StyledExpandedNavbar>
+
           <BecomeHost>
+            {/* TODO: Implement this feature later - not part of MVP
             <ButtonLink fontWeight={'bold'}>Airbnb your home</ButtonLink>
             <button>
               <Globe />
-            </button>
+            </button>          */}
           </BecomeHost>
+
           <UserMenu />
         </StyledNavbar>
         <StyledExpandedSearch visible={isExpanded}>
@@ -343,18 +359,40 @@ export const Navbar = () => {
                 </CountriesWrapper>
               </FloatingMenuWrapper>
             </ExpandedMenuWrapper>
-            <SearchOption>
-              Check in
-              <StyledLabel size="font-size-m" color="neutral-07">
-                Add dates
-              </StyledLabel>
-            </SearchOption>
-            <SearchOption>
-              Check out{' '}
-              <StyledLabel size="font-size-m" color="neutral-07">
-                Add dates
-              </StyledLabel>
-            </SearchOption>
+            <ExpandedDatesWrapper>
+              <SearchOption
+                onClick={() => handleToggleMenu(TOGGLE_MENU_OPTIONS.DATES)}
+              >
+                Check in
+                <StyledLabel size="font-size-m" color="neutral-07">
+                  Add dates
+                </StyledLabel>
+              </SearchOption>
+              <SearchOption
+                onClick={() => handleToggleMenu(TOGGLE_MENU_OPTIONS.DATES)}
+              >
+                Check out
+                <StyledLabel size="font-size-m" color="neutral-07">
+                  Add dates
+                </StyledLabel>
+              </SearchOption>
+              <FloatingMenuWrapper
+                expanded={datesMenuOpen}
+                left="0"
+                margin="70px 10px"
+              >
+                <ExpandedMenuWrapper>
+                  <DatesWrapper>
+                    <Flex direction="row">
+                      <Flex direction="column">
+                        <DateRangeSelector />
+                      </Flex>
+                    </Flex>
+                  </DatesWrapper>
+                </ExpandedMenuWrapper>
+              </FloatingMenuWrapper>
+            </ExpandedDatesWrapper>
+
             <ExpandedMenuWrapper>
               <SearchOption
                 onClick={() => handleToggleMenu(TOGGLE_MENU_OPTIONS.GUESTS)}
