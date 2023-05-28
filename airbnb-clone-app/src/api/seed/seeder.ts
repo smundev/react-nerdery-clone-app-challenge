@@ -121,8 +121,8 @@ const generateFakeListing = (): Listing => ({
     precision: 0.01,
   }),
   cleaning_fee: faker.number.float({ min: 20, max: 100, precision: 0.01 }),
-  extra_people: faker.number.float({ min: 10, max: 50, precision: 0.01 }),
-  guests_included: faker.number.float({ min: 1, max: 10 }),
+  extra_people: faker.number.int({ min: 10, max: 50 }),
+  guests_included: faker.number.int({ min: 1, max: 10 }),
   rating: faker.number.float({ min: 1, max: 5, precision: 0.1 }),
   images: [
     faker.image.urlLoremFlickr({ category: 'city' }),

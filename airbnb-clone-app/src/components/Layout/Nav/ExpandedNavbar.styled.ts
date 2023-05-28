@@ -3,7 +3,6 @@ import styled from 'styled-components'
 type Props = {
   isSelected?: boolean
   visible?: boolean
-  tab?: string
 }
 
 export const StyledExpandedNavbar = styled.div<Props>`
@@ -51,6 +50,14 @@ export const StyledExpandedSearch = styled.div<Props>`
   background-color: ${({ theme }) => theme.colors.body};
   flex: 1;
 
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
   @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
     display: none;
     margin: 0 0 1rem;
@@ -60,24 +67,39 @@ export const StyledExpandedSearch = styled.div<Props>`
 export const SearchButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  flex-grow: 0.2;
+  justify-content: space-between;
+  flex-grow: 0.6;
+  height: 60px;
 
   background: ${({ theme }) => theme.colors.body};
   border: 1px solid ${({ theme }) => theme.colors['neutral-03']};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
   border-radius: 500px;
   transition: all 0.2s ease-out;
+  cursor: pointer;
 `
 
 export const SearchOption = styled.div`
   display: flex;
-  flex-direction: column;
   flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  height: 44px;
   padding: 8px 8px 8px 18px;
   border-radius: 500px;
   font-size: ${({ theme }) => theme.sizes['font-size-s']};
   font-weight: ${({ theme }) => theme.sizes['font-weight-bold']};
   cursor: pointer;
+
+  div {
+    background-color: transparent;
+    justify-content: center;
+    svg {
+      &:hover {
+        color: ${({ theme }) => theme.colors['primary-02']};
+      }
+    }
+  }
 
   input {
     border: none;
@@ -85,17 +107,25 @@ export const SearchOption = styled.div`
     font-size: ${({ theme }) => theme.sizes['font-size-m']};
     color: ${({ theme }) => theme.colors['neutral-07']};
     font-weight: ${({ theme }) => theme.sizes['font-weight-regular']};
+  }
 
+  svg {
+    color: ${({ theme }) => theme.colors['primary-01']};
     &:hover {
-      background-color: ${(props) => props.theme.colors['neutral-03']};
+      color: ${({ theme }) => theme.colors['primary-02']};
     }
   }
+
+  label {
+    cursor: pointer;
+  }
+
   &:hover {
     background-color: ${(props) => props.theme.colors['neutral-03']};
   }
 `
 
-export const WhereWrapper = styled.div`
+export const ExpandedMenuWrapper = styled.div`
   position: relative;
 `
 export const CountriesWrapper = styled.div`
@@ -105,14 +135,32 @@ export const CountriesWrapper = styled.div`
   flex-wrap: wrap;
   padding: 25px;
   gap: 16px;
-  div {
-    img {
-      border-radius: 16px;
-      border: 1px solid ${({ theme }) => theme.colors['neutral-03']};
-      &:hover {
-        cursor: pointer;
-        border: 1px solid black;
-      }
+`
+
+export const StyledCountry = styled.div<{ isSelected?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    border-radius: 16px;
+    &:hover {
+      cursor: pointer;
+      border: 1px solid black;
     }
+    border: ${({ isSelected, theme }) =>
+      isSelected
+        ? '1px solid black'
+        : `1px solid ${theme.colors['neutral-03']}`};
   }
+`
+
+export const GuestsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 306px;
+  flex-wrap: wrap;
+  padding: 25px;
+  gap: 16px;
 `

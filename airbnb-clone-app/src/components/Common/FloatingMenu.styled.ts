@@ -16,6 +16,7 @@ export const FloatingMenuWrapper = styled.div<WrapperProps>`
   left: ${({ left }) => (left ? left : 'auto')};
   right: ${({ right }) => (right ? right : 'auto')};
   margin: ${({ margin }) => (margin ? margin : '0')};
+  z-index: 10;
 
   width: ${({ width = 'auto' }) => width};
   align-items: flex-start;
