@@ -10,11 +10,13 @@ import { useEffect } from 'react'
 import { Login } from '../../Auth/Login'
 import { Signup } from '../../Auth/Signup'
 import { useAuthContext } from '../../../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const MENU_OPTIONS = {
   LOGIN: Symbol('login'),
   SIGN_UP: Symbol('sign up'),
   LOG_OUT: Symbol('log out'),
+  WISHLIST: Symbol('wishlist'),
   BECOME_HOST: Symbol('become host'),
   HELP: Symbol('help'),
 }
@@ -27,6 +29,7 @@ export const UserMenu = () => {
   const [loginModal, , LoginForm] = Login()
   const [signupModal, , SignUpForm] = Signup()
   const { user, logOut } = useAuthContext()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (isExpanded && clickedOutside) {
@@ -61,6 +64,9 @@ export const UserMenu = () => {
       case MENU_OPTIONS.LOG_OUT:
         logOut()
         break
+      case MENU_OPTIONS.WISHLIST:
+        navigate('/wishlist')
+        break
       case MENU_OPTIONS.BECOME_HOST:
         break
       case MENU_OPTIONS.HELP:
@@ -88,32 +94,34 @@ export const UserMenu = () => {
           {!user && (
             <>
               <FloatingMenuItem
+                onClick={() => handleClick(MENU_OPTIONS.SIGN_UP)}
+              >
+                Sign up
+              </FloatingMenuItem>
+              <FloatingMenuItem
                 fontWeight="font-weight-bold"
                 onClick={() => handleClick(MENU_OPTIONS.LOGIN)}
               >
                 Log in
               </FloatingMenuItem>
+            </>
+          )}
+
+          {user && (
+            <>
               <FloatingMenuItem
-                onClick={() => handleClick(MENU_OPTIONS.SIGN_UP)}
+                fontWeight="font-weight-bold"
+                onClick={() => handleClick(MENU_OPTIONS.WISHLIST)}
               >
-                Sign up
+                My Wishlist
+              </FloatingMenuItem>
+              <FloatingMenuItem
+                onClick={() => handleClick(MENU_OPTIONS.LOG_OUT)}
+              >
+                Log out
               </FloatingMenuItem>
             </>
           )}
-          {user && (
-            <FloatingMenuItem onClick={() => handleClick(MENU_OPTIONS.LOG_OUT)}>
-              Log out
-            </FloatingMenuItem>
-          )}
-          <FloatingMenuItem separator={true} />
-          <FloatingMenuItem
-            onClick={() => handleClick(MENU_OPTIONS.BECOME_HOST)}
-          >
-            Airbnb your home
-          </FloatingMenuItem>
-          <FloatingMenuItem onClick={() => handleClick(MENU_OPTIONS.HELP)}>
-            Help
-          </FloatingMenuItem>
         </FloatingMenuWrapper>
       </StyledUserMenu>
       {LoginForm()}

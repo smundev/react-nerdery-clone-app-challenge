@@ -7,7 +7,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <Categories />
       <Flex>{children}</Flex>
     </>
   )

@@ -24,8 +24,8 @@ import { StickyWrapper } from '../../Common/StickyWrapper'
 import { UserMenu } from './UserMenu'
 import { useClickedOutside } from '../../../hooks/useClickedOutside'
 import { FloatingMenuWrapper } from '../../Common/FloatingMenu.styled'
-import { useSearchParams } from 'react-router-dom'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { IoSearchCircle } from 'react-icons/io5'
 import { Separator } from '../../Common/Input.styled'
 import { StyledAnchor, StyledLabel } from '../../Common/Typography.styled'
@@ -69,7 +69,6 @@ export const Navbar = () => {
   const [pets, setPets] = useState(0)
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const location = useLocation()
 
   const [clickedOutsideAdvancedSearch, componentRef] = useClickedOutside({
     dependencies: [isExpanded],
@@ -105,20 +104,6 @@ export const Navbar = () => {
     if (!isExpanded) {
       toggleIsExpanded()
     }
-  }
-
-  const handleResetFilters = () => {
-    setRegion(null)
-    setManualLocation('')
-    setAdults(0)
-    setChildren(0)
-    setInfants(0)
-    setPets(0)
-    if (isExpanded) toggleIsExpanded()
-    navigate({
-      pathname: location.pathname,
-      search: '',
-    })
   }
 
   const handleManualLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -178,7 +163,7 @@ export const Navbar = () => {
     }
 
     navigate({
-      pathname: location.pathname,
+      pathname: '/',
       search: searchParams.toString(),
     })
   }
@@ -187,7 +172,9 @@ export const Navbar = () => {
     <StickyWrapper zIndex={2} ref={componentRef}>
       <Flex direction="column" gap="15px">
         <StyledNavbar visible={isExpanded}>
-          <StyledLogo onClick={handleResetFilters} />
+          <Link to="/">
+            <StyledLogo />
+          </Link>
           <Navigation visible={!isExpanded}>
             <div>
               <FiSearch />

@@ -44,14 +44,15 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     const [wishListed, setWishListed] = useState(isWishlisted)
     const [toggleLogin, , LoginForm] = Login()
     const { addItemToWishList, removeItemFromWishList } = useWishlist()
-    console.log(wishListed)
-    const handleWishlist = (id: string) => {
+    const handleWishlist = () => {
       if (!wishListed)
-        addItemToWishList(id, toggleLogin).then((res) => {
-          if (res) {
-            setWishListed(res.id)
+        addItemToWishList(idListing, title, images[0], toggleLogin).then(
+          (res) => {
+            if (res) {
+              setWishListed(res.id)
+            }
           }
-        })
+        )
       else handleRemoveWishlist()
     }
 
@@ -70,7 +71,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           <WishlistButton
             color={wishListed ? 'primary-01' : 'neutral-03'}
             hoverColor={wishListed ? 'neutral-03' : 'primary-01'}
-            onClick={() => handleWishlist(idListing)}
+            onClick={() => handleWishlist()}
           >
             {wishListed ? (
               <MdOutlineFavorite size={25} />

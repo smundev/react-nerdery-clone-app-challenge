@@ -15,10 +15,34 @@ export const useWishlist = () => {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
+    if (!user) return
+    const getMyWishList = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await getWishList(
+          {
+            user: user.user.id,
+          },
+          user.accessToken
+        )
+        setWishlist(data)
+      } catch (e: any) {
+        setError(e.message as string)
+        console.error(e)
+      } finally {
+        setLoading(false)
+      }
+    }
     getMyWishList()
   }, [lastUpdated])
 
-  const addItemToWishList = async (listingId: string, cb: () => void) => {
+  const addItemToWishList = async (
+    listing_id: string,
+    name: string,
+    picture_url: string,
+    cb: () => void
+  ) => {
     setLoading(true)
     setError(null)
     try {
@@ -29,7 +53,9 @@ export const useWishlist = () => {
       const { data } = await addToWishList(
         {
           user: user.user.id,
-          listing_id: listingId,
+          listing_id,
+          name,
+          picture_url,
         },
         user.accessToken
       )
@@ -37,29 +63,6 @@ export const useWishlist = () => {
       return data
     } catch (e: any) {
       setError(e.message as string)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const getMyWishList = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      if (!user) {
-        console.log(user)
-        throw new Error('Not logged in')
-      }
-      const data = await getWishList(
-        {
-          user: user.user.id,
-        },
-        user.accessToken
-      )
-      setWishlist(data)
-    } catch (e: any) {
-      setError(e.message as string)
-      console.error(e)
     } finally {
       setLoading(false)
     }
@@ -91,7 +94,6 @@ export const useWishlist = () => {
     wishlist,
     loading,
     error,
-    getMyWishList,
     removeItemFromWishList,
     addItemToWishList,
   }
