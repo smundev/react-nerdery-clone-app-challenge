@@ -1,9 +1,10 @@
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 import {
   StyledCard,
   ImageWrapper,
   CardSection,
   StyledImage,
+  WishlistButton,
 } from './Card.styled'
 import { AiFillStar } from 'react-icons/ai'
 import { Carousel } from 'react-responsive-carousel'
@@ -11,21 +12,73 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { v4 as uuidv4 } from 'uuid'
+import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md'
+import { Login } from '../Auth/Login'
+import { useWishlist } from '../../hooks/useWishlist'
 
 type CardProps = {
+  idListing: string
   title: string
   host: string
   hostJob: string
   images: string[]
   price: number
   rating: number
+  isWishlisted: number | null
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ title, host, hostJob, images, price, rating }: CardProps, ref) => {
+  (
+    {
+      title,
+      host,
+      hostJob,
+      images,
+      price,
+      rating,
+      idListing,
+      isWishlisted,
+    }: CardProps,
+    ref
+  ) => {
+    const [wishListed, setWishListed] = useState(isWishlisted)
+    const [toggleLogin, , LoginForm] = Login()
+    const { addItemToWishList, removeItemFromWishList } = useWishlist()
+    console.log(wishListed)
+    const handleWishlist = (id: string) => {
+      if (!wishListed)
+        addItemToWishList(id, toggleLogin).then((res) => {
+          if (res) {
+            setWishListed(res.id)
+          }
+        })
+      else handleRemoveWishlist()
+    }
+
+    const handleRemoveWishlist = () => {
+      if (!wishListed) return
+      removeItemFromWishList(wishListed).then((res) => {
+        if (res) {
+          setWishListed(null)
+        }
+      })
+    }
+
     return (
       <>
         <StyledCard ref={ref}>
+          <WishlistButton
+            color={wishListed ? 'primary-01' : 'neutral-03'}
+            hoverColor={wishListed ? 'neutral-03' : 'primary-01'}
+            onClick={() => handleWishlist(idListing)}
+          >
+            {wishListed ? (
+              <MdOutlineFavorite size={25} />
+            ) : (
+              <MdOutlineFavoriteBorder size={25} />
+            )}
+          </WishlistButton>
+
           <Carousel
             showIndicators={true}
             infiniteLoop={true}
@@ -55,6 +108,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             </span>
           </CardSection>
         </StyledCard>
+        {LoginForm()}
       </>
     )
   }

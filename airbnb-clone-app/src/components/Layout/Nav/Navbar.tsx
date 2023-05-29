@@ -30,7 +30,6 @@ import { IoSearchCircle } from 'react-icons/io5'
 import { Separator } from '../../Common/Input.styled'
 import { StyledAnchor, StyledLabel } from '../../Common/Typography.styled'
 import { HorizontalStep } from '../../Common/HorizontalStep'
-import ReactDatePicker from 'react-datepicker'
 import DateRangeSelector from './DateRangeSelector'
 
 const SEARCH_CRITERIA = {

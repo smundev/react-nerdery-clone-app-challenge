@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { useObserveElement } from '../../hooks/useObserveElement'
 import { useSearchParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
+import { useWishlist } from '../../hooks/useWishlist'
+import { findWishListByID } from '../../utils/array'
 
 const ListingContainer = styled.section`
   display: flex;
@@ -23,6 +25,7 @@ const ListingContainer = styled.section`
 export const Listing = () => {
   const [searchParams] = useSearchParams()
   const { data, loading, getPageListing, hasMore } = useListing(searchParams)
+  const { wishlist } = useWishlist()
   const { objectVisible, objectRef } = useObserveElement({
     loading,
     continueObserving: hasMore,
@@ -44,26 +47,28 @@ export const Listing = () => {
             return (
               <Card
                 key={item.id}
-                id-test={item.id}
+                idListing={item.id}
                 title={item.address.street}
                 host={item.host.host_name}
                 hostJob={item.host.host_work_info}
                 images={item.images}
                 price={item.price}
                 rating={item.rating}
+                isWishlisted={findWishListByID(wishlist, item.id)}
                 ref={objectRef}
               />
             )
           return (
             <Card
               key={item.id}
-              id-test={item.id}
+              idListing={item.id}
               title={item.address.street}
               host={item.host.host_name}
               hostJob={item.host.host_work_info}
               images={item.images}
               price={item.price}
               rating={item.rating}
+              isWishlisted={findWishListByID(wishlist, item.id)}
             />
           )
         })}

@@ -57,3 +57,26 @@ export const CardSection = styled.div`
     white-space: nowrap;
   }
 `
+export const WishlistButton = styled.button<{
+  color: string
+  hoverColor: string
+}>`
+  position: relative;
+  z-index: 10;
+  border: none;
+  background: none;
+
+  svg {
+    position: absolute;
+    color: ${({ color, theme }) => theme.colors[color || 'white']};
+    top: 2.1rem;
+    right: 1.3rem;
+
+    cursor: pointer;
+
+    &:hover {
+      color: ${({ hoverColor, theme }) =>
+        theme.colors[hoverColor || 'primary-01']};
+    }
+  }
+`

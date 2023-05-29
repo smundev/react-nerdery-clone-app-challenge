@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { login } from '../api/auth/login'
 import { signup } from '../api/auth/signup'
 import { UserResponse, SignupParams } from '../api/auth/types'
 
+const loadFromLocalStorage = () => {
+  const storedUser = localStorage.getItem('airbnb-logged-user')
+  return storedUser ? JSON.parse(storedUser) : null
+}
+
 export const useAuth = () => {
-  const [user, setUser] = useState<UserResponse>(null)
+  const [user, setUser] = useState<UserResponse>(loadFromLocalStorage)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('airbnb-logged-user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-  }, [])
 
   const signIn = async (email: string, password: string) => {
     try {
