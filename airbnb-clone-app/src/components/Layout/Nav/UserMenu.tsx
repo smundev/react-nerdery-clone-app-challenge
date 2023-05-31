@@ -7,8 +7,6 @@ import {
 import { useToggle } from '../../../hooks/useToggle'
 import { useClickedOutside } from '../../../hooks/useClickedOutside'
 import { useEffect } from 'react'
-import { Login } from '../../Auth/Login'
-import { Signup } from '../../Auth/Signup'
 import { useAuthContext } from '../../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,9 +24,7 @@ export const UserMenu = () => {
   const [clickedOutside, componentRef] = useClickedOutside({
     dependencies: [isExpanded],
   })
-  const [loginModal, , LoginForm] = Login()
-  const [signupModal, , SignUpForm] = Signup()
-  const { user, logOut } = useAuthContext()
+  const { user, logOut, openLogin, openSignup } = useAuthContext()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -56,10 +52,10 @@ export const UserMenu = () => {
   const handleClick = (option: Symbol) => {
     switch (option) {
       case MENU_OPTIONS.LOGIN:
-        loginModal()
+        openLogin()
         break
       case MENU_OPTIONS.SIGN_UP:
-        signupModal()
+        openSignup()
         break
       case MENU_OPTIONS.LOG_OUT:
         logOut()
@@ -124,8 +120,6 @@ export const UserMenu = () => {
           )}
         </FloatingMenuWrapper>
       </StyledUserMenu>
-      {LoginForm()}
-      {SignUpForm()}
     </>
   )
 }

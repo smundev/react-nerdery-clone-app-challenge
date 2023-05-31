@@ -1,15 +1,19 @@
 import React from 'react'
 import { UserResponse, SignupParams } from '../api/auth/types'
 import { useAuth } from '../hooks/useAuth'
+import { Login } from '../components/Auth/Login'
+import { Signup } from '../components/Auth/Signup'
 
 type AuthContextType = {
   user: UserResponse
   loading: boolean
   error: string | null
   signIn: (email: string, password: string) => void
-  register: (newUser: SignupParams) => void
+  registerUser: (newUser: SignupParams) => void
   logOut: () => void
   clearErrors: () => void
+  openLogin: () => void
+  openSignup: () => void
 }
 
 type AuthProviderProps = {
@@ -21,26 +25,47 @@ export const AuthContext = React.createContext<AuthContextType>({
   loading: false,
   error: null,
   signIn: () => {},
-  register: () => {},
+  registerUser: () => {},
   logOut: () => {},
   clearErrors: () => {},
+  openLogin: () => {},
+  openSignup: () => {},
 })
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, signIn, register, logOut, loading, error, setError] = useAuth()
+  const { user, signIn, registerUser, logOut, loading, error, setError } =
+    useAuth()
+  const { openLogin, LoginForm } = Login({
+    user,
+    signIn,
+    error,
+    clearErrors: () => setError(null),
+  })
+  const { openSignup, SignUpForm } = Signup({
+    user,
+    registerUser,
+    error,
+    clearErrors: () => setError(null),
+  })
 
   const contextValue = {
     user,
     signIn,
-    register,
+    registerUser,
     logOut,
     loading,
     error,
     clearErrors: () => setError(null),
+    openLogin,
+    openSignup,
   }
 
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>
+      {children}
+      {LoginForm()}
+      {SignUpForm()}
+    </AuthContext.Provider>
   )
 }
 

@@ -7,10 +7,10 @@ import { AuthProvider } from './context/AuthContext'
 import { router } from './router/history'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <AuthProvider>
-    <ThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
+    <AuthProvider>
       <GlobalStyles />
       <RouterProvider router={router} />
-    </ThemeProvider>
-  </AuthProvider>
+    </AuthProvider>
+  </ThemeProvider>
 )

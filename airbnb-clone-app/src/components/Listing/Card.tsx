@@ -13,7 +13,6 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { v4 as uuidv4 } from 'uuid'
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md'
-import { Login } from '../Auth/Login'
 import { useWishlist } from '../../hooks/useWishlist'
 import { useNavigate } from 'react-router-dom'
 
@@ -43,19 +42,16 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     const [wishListed, setWishListed] = useState(isWishlisted)
-    const [toggleLogin, , LoginForm] = Login()
     const { addItemToWishList, removeItemFromWishList } = useWishlist()
     const navigate = useNavigate()
 
     const handleWishlist = () => {
       if (!wishListed)
-        addItemToWishList(idListing, title, images[0], toggleLogin).then(
-          (res) => {
-            if (res) {
-              setWishListed(res.id)
-            }
+        addItemToWishList(idListing, title, images[0]).then((res) => {
+          if (res) {
+            setWishListed(res.id)
           }
-        )
+        })
       else handleRemoveWishlist()
     }
 
@@ -117,7 +113,6 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             </span>
           </CardSection>
         </StyledCard>
-        {LoginForm()}
       </>
     )
   }

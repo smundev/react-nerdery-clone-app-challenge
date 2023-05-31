@@ -10,11 +10,17 @@ import {
 import { PrimaryButton } from '../Common/Button.styled'
 import { useForm } from 'react-hook-form'
 import { MdError } from 'react-icons/md'
-import { useAuthContext } from '../../context/AuthContext'
+import { UserResponse } from '../../api/auth/types'
 
-export const Login = () => {
+type Props = {
+  user: UserResponse
+  error: string | null
+  signIn: (email: string, password: string) => void
+  clearErrors: () => void
+}
+
+export const Login = ({ user, error, signIn, clearErrors }: Props) => {
   const [modalOpen, setModalOpen] = useState(false)
-  const { user, signIn, error: loginErrors, clearErrors } = useAuthContext()
 
   const {
     register,
@@ -28,16 +34,16 @@ export const Login = () => {
   })
 
   useEffect(() => {
-    if (!loginErrors) {
-      closeModal()
+    if (!error) {
+      closeLogin()
     }
   }, [user])
 
-  const openModal = () => {
+  const openLogin = () => {
     setModalOpen(true)
   }
 
-  const closeModal = () => {
+  const closeLogin = () => {
     setModalOpen(false)
     clearErrors()
     reset()
@@ -45,7 +51,7 @@ export const Login = () => {
 
   const LoginForm = () => {
     return (
-      <Modal isOpen={modalOpen} onClose={closeModal} title="Log in">
+      <Modal isOpen={modalOpen} onClose={closeLogin} title="Log in">
         <Flex direction="column">
           <form onSubmit={onSubmit}>
             <Flex direction="column" gap="15px">
@@ -80,7 +86,7 @@ export const Login = () => {
                 )}
               </InputGroup>
               <StyledInputError fontSize="font-size-m">
-                {loginErrors}
+                {error}
               </StyledInputError>
               <PrimaryButton type="submit">Agree and continue</PrimaryButton>
             </Flex>
@@ -89,5 +95,5 @@ export const Login = () => {
       </Modal>
     )
   }
-  return [openModal, closeModal, LoginForm]
+  return { openLogin, closeLogin, LoginForm }
 }

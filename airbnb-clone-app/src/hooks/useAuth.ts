@@ -31,7 +31,7 @@ export const useAuth = () => {
     }
   }
 
-  const register = async (newUser: SignupParams) => {
+  const registerUser = async (newUser: SignupParams) => {
     try {
       setLoading(true)
       const user = await signup(newUser)
@@ -58,5 +58,5 @@ export const useAuth = () => {
     setUser(null)
   }
 
-  return [user, signIn, register, logOut, loading, error, setError] as const
+  return { user, signIn, registerUser, logOut, loading, error, setError }
 }

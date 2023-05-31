@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useAuthContext } from '../../context/AuthContext'
 import Modal from '../Common/Modal'
 import { PrimaryButton } from '../Common/Button.styled'
 import { Flex } from '../Common/Flex.styled'
@@ -16,15 +15,18 @@ import { Controller, useForm } from 'react-hook-form'
 import { MdError } from 'react-icons/md'
 import ReactDatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { SignupParams, UserResponse } from '../../api/auth/types'
 
-export const Signup = () => {
+type Props = {
+  user: UserResponse
+  error: string | null
+  registerUser: (newUser: SignupParams) => void
+  clearErrors: () => void
+}
+
+export const Signup = ({ user, registerUser, error, clearErrors }: Props) => {
   const [modalOpen, setModalOpen] = useState(false)
-  const {
-    user,
-    register: signIn,
-    error: signupErrors,
-    clearErrors,
-  } = useAuthContext()
+
   const {
     register,
     handleSubmit,
@@ -34,7 +36,7 @@ export const Signup = () => {
   } = useForm()
 
   const onSubmit = handleSubmit((data) => {
-    signIn({
+    registerUser({
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
@@ -45,16 +47,16 @@ export const Signup = () => {
   })
 
   useEffect(() => {
-    if (!signupErrors) {
-      closeModal()
+    if (!error) {
+      closeSignup()
     }
   }, [user])
 
-  const openModal = () => {
+  const openSignup = () => {
     setModalOpen(true)
   }
 
-  const closeModal = () => {
+  const closeSignup = () => {
     setModalOpen(false)
     clearErrors()
     reset()
@@ -62,7 +64,7 @@ export const Signup = () => {
 
   const SignUpForm = () => {
     return (
-      <Modal isOpen={modalOpen} onClose={closeModal} title="Sign up">
+      <Modal isOpen={modalOpen} onClose={closeSignup} title="Sign up">
         <Flex direction="column">
           <form onSubmit={onSubmit}>
             <Flex direction="column" gap="15px">
@@ -163,7 +165,7 @@ export const Signup = () => {
                 the&nbsp;<a href="#">Privacy Policy</a>.
               </p>
               <StyledInputError fontSize="font-size-m">
-                {signupErrors}
+                {error}
               </StyledInputError>
               <PrimaryButton type="submit">Agree and continue</PrimaryButton>
               <Separator />
@@ -186,5 +188,5 @@ export const Signup = () => {
       </Modal>
     )
   }
-  return [openModal, closeModal, SignUpForm]
+  return { openSignup, closeSignup, SignUpForm }
 }

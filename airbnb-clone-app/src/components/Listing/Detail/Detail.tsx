@@ -24,7 +24,6 @@ export const Detail = () => {
   const { data, loading, error, getOneListing } = useListing(searchParams)
   const [listing] = data
 
-  //get URL params
   const { id } = useParams()
 
   useEffect(() => {
@@ -51,20 +50,20 @@ export const Detail = () => {
             <StyledLabel size="font-size-m" fontWeight="font-weight-bold">
               <AiFillStar />
               &nbsp;
-              {listing?.reviews.review_scores.review_scores_rating}
+              {listing.reviews.review_scores.review_scores_rating}
             </StyledLabel>
             &nbsp;·&nbsp;
             <StyledAnchor size="font-size-m" fontWeight="font-weight-bold">
-              {listing?.reviews?.detail.length}
+              {listing.reviews.detail.length}
               &nbsp;reviews
             </StyledAnchor>
             &nbsp;·&nbsp;
             <StyledAnchor size="font-size-m" fontWeight="font-weight-bold">
-              {`${listing?.address?.street}, ${listing?.address?.country}`}
+              {`${listing.address.street}, ${listing.address.country}`}
             </StyledAnchor>
           </Flex>
           <StyledImageWrapper>
-            {listing?.images?.map(
+            {listing.images.map(
               (image: string, index) =>
                 index < 5 && (
                   <img
@@ -79,15 +78,15 @@ export const Detail = () => {
           <HostInfo>
             <Flex direction="column">
               <StyledLabel size="font-size-xl" fontWeight="font-weight-bold">
-                Entire home hosted by {listing?.host?.host_name}
+                Entire home hosted by {listing.host.host_name}
               </StyledLabel>
               <StyledLabel size="font-size-l" fontWeight="font-weight-normal">
-                {listing?.accommodates} guests&nbsp;·&nbsp;{listing?.bedrooms}
-                &nbsp;bedrooms&nbsp;·&nbsp;{listing?.beds} beds&nbsp;·&nbsp;
-                {listing?.bathrooms} baths
+                {listing.accommodates} guests&nbsp;·&nbsp;{listing.bedrooms}
+                &nbsp;bedrooms&nbsp;·&nbsp;{listing.beds} beds&nbsp;·&nbsp;
+                {listing.bathrooms} baths
               </StyledLabel>
             </Flex>
-            <img src={listing?.host?.host_picture_url} alt="host" />
+            <img src={listing.host.host_picture_url} alt="host" />
           </HostInfo>
           <Separator w={'50%'} />
           <Flex direction="column" margin="20px 0">
@@ -118,7 +117,7 @@ export const Detail = () => {
                   color="neutral-07"
                 >
                   Recent guests gave the location a&nbsp;
-                  {listing?.reviews?.review_scores.review_scores_location}-star
+                  {listing.reviews.review_scores.review_scores_location}-star
                   rating.
                 </StyledLabel>
               </Flex>
@@ -135,7 +134,7 @@ export const Detail = () => {
                   color="neutral-07"
                 >
                   This place has a&nbsp;
-                  {listing?.reviews?.review_scores.review_scores_checkin}-star
+                  {listing.reviews.review_scores.review_scores_checkin}-star
                   rating check-in process.
                 </StyledLabel>
               </Flex>
@@ -147,7 +146,7 @@ export const Detail = () => {
               What this place offers
             </StyledLabel>
             <Amenities>
-              {listing?.amenities?.map((amenity: string) => (
+              {listing.amenities.map((amenity: string) => (
                 <StyledLabel key={uuidv4()} size="font-size-l">
                   {amenity}
                 </StyledLabel>
@@ -159,9 +158,9 @@ export const Detail = () => {
             <StyledLabel size="font-size-xl" fontWeight="font-weight-bold">
               <AiFillStar />
               &nbsp;
-              {listing?.reviews.review_scores.review_scores_rating}
+              {listing.reviews.review_scores.review_scores_rating}
               &nbsp;·&nbsp;
-              {listing?.reviews?.detail.length}&nbsp;reviews
+              {listing.reviews.detail.length}&nbsp;reviews
             </StyledLabel>
 
             <Rating>
@@ -174,7 +173,7 @@ export const Detail = () => {
                 </StyledLabel>
                 <progress
                   value={
-                    listing?.reviews.review_scores.review_scores_cleanliness
+                    listing.reviews.review_scores.review_scores_cleanliness
                   }
                   max="5"
                 ></progress>
@@ -188,7 +187,7 @@ export const Detail = () => {
                 </StyledLabel>
                 <progress
                   value={
-                    listing?.reviews.review_scores.review_scores_communication
+                    listing.reviews.review_scores.review_scores_communication
                   }
                   max="5"
                 ></progress>
@@ -201,7 +200,7 @@ export const Detail = () => {
                   Check-in
                 </StyledLabel>
                 <progress
-                  value={listing?.reviews.review_scores.review_scores_checkin}
+                  value={listing.reviews.review_scores.review_scores_checkin}
                   max="5"
                 ></progress>
               </div>
@@ -213,7 +212,7 @@ export const Detail = () => {
                   Accuracy
                 </StyledLabel>
                 <progress
-                  value={listing?.reviews.review_scores.review_scores_accuracy}
+                  value={listing.reviews.review_scores.review_scores_accuracy}
                   max="5"
                 ></progress>
               </div>
@@ -225,7 +224,7 @@ export const Detail = () => {
                   Location
                 </StyledLabel>
                 <progress
-                  value={listing?.reviews.review_scores.review_scores_location}
+                  value={listing.reviews.review_scores.review_scores_location}
                   max="5"
                 ></progress>
               </div>
@@ -237,13 +236,13 @@ export const Detail = () => {
                   Value
                 </StyledLabel>
                 <progress
-                  value={listing?.reviews.review_scores.review_scores_value}
+                  value={listing.reviews.review_scores.review_scores_value}
                   max="5"
                 ></progress>
               </div>
             </Rating>
             <ReviewUser>
-              {listing?.reviews.detail.map((review) => (
+              {listing.reviews.detail.map((review) => (
                 <div key={review.id}>
                   <Flex direction="row">
                     <img src={review.reviewer_avatar} />

@@ -8,14 +8,18 @@ import { WishList } from '../api/wishlist/types'
 import { useAuthContext } from '../context/AuthContext'
 
 export const useWishlist = () => {
-  const { user } = useAuthContext()
+  const { user, openLogin } = useAuthContext()
   const [wishlist, setWishlist] = useState<WishList[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      setWishlist([])
+      return
+    }
+
     const getMyWishList = async () => {
       setLoading(true)
       setError(null)
@@ -40,14 +44,13 @@ export const useWishlist = () => {
   const addItemToWishList = async (
     listing_id: string,
     name: string,
-    picture_url: string,
-    cb: () => void
+    picture_url: string
   ) => {
     setLoading(true)
     setError(null)
     try {
       if (!user) {
-        cb()
+        openLogin()
         throw new Error('Not logged in')
       }
       const { data } = await addToWishList(
