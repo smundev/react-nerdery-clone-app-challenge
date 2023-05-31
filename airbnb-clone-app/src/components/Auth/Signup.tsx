@@ -155,14 +155,13 @@ export const Signup = () => {
                   <MdError size={16} /> Password is required
                 </StyledInputError>
               )}
-              <StyledLabel size="font-size-m">
+              <p>
                 By selecting <strong>Agree and continue</strong>, I agree to
-                Airbnb’s
-                <a href="#"> Terms of Service, Payments Terms of Service</a>,
-                and
-                <a href="#"> Nondiscrimination Policy</a> and acknowledge the
-                <a href="#"> Privacy Policy</a>.
-              </StyledLabel>
+                Airbnb’s &nbsp;
+                <a href="#">Terms of Service, Payments Terms of Service</a>, and
+                &nbsp;<a href="#">Nondiscrimination Policy</a> and acknowledge
+                the&nbsp;<a href="#">Privacy Policy</a>.
+              </p>
               <StyledInputError fontSize="font-size-m">
                 {signupErrors}
               </StyledInputError>

@@ -38,9 +38,9 @@ export const InputGroup = styled.div`
   box-sizing: border-box;
 `
 
-export const Separator = styled.div`
+export const Separator = styled.div<{ w?: string }>`
   height: 1px;
-  width: 100%;
+  width: ${({ w }) => w || '100%'};
   background-color: ${({ theme }) => theme.colors['neutral-04']};
   margin: 0;
 `

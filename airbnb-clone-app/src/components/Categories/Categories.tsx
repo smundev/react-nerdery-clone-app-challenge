@@ -36,9 +36,10 @@ export const Categories = () => {
             )
           })}
         </ScrollContainer>
+        {/* TODO - filters not part of MVP
         <SecondaryButton fontWeight="bold">
           <RiEqualizerLine /> Filters
-        </SecondaryButton>
+        </SecondaryButton>*/}
       </StyledCategory>
     </StickyWrapper>
   )

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { getAll, getPage } from '../api/listing/listing'
+import { getAll, getPage, getOne } from '../api/listing/listing'
 import { Listing } from '../api/listing/types'
 
 export const useListing = (queryParam: URLSearchParams) => {
@@ -57,6 +57,21 @@ export const useListing = (queryParam: URLSearchParams) => {
     }
   }
 
+  const getOneListing = async (id: string) => {
+    try {
+      setLoading(true)
+      const data = await getOne(id)
+      setData(data)
+      setError(null)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      setError('An error has ocurred while trying to get the listing')
+      setData([])
+      setHasMore(false)
+    }
+  }
+
   const resetData = () => {
     page.current = 1
     setData([])
@@ -72,6 +87,7 @@ export const useListing = (queryParam: URLSearchParams) => {
     hasMore,
     getAllListing,
     getPageListing,
+    getOneListing,
     resetData,
   }
 }

@@ -123,7 +123,6 @@ const generateFakeListing = (): Listing => ({
   cleaning_fee: faker.number.float({ min: 20, max: 100, precision: 0.01 }),
   extra_people: faker.number.int({ min: 10, max: 50 }),
   guests_included: faker.number.int({ min: 1, max: 10 }),
-  rating: faker.number.float({ min: 1, max: 5, precision: 0.1 }),
   images: [
     faker.image.urlLoremFlickr({ category: 'city' }),
     faker.image.urlLoremFlickr({ category: 'city' }),
@@ -182,13 +181,41 @@ const generateFakeListing = (): Listing => ({
   reviews: {
     review_id: faker.string.uuid(),
     review_scores: {
-      review_scores_accuracy: faker.number.int({ min: 1, max: 5 }),
-      review_scores_cleanliness: faker.number.int({ min: 1, max: 5 }),
-      review_scores_checkin: faker.number.int({ min: 1, max: 5 }),
-      review_scores_communication: faker.number.int({ min: 1, max: 5 }),
-      review_scores_location: faker.number.int({ min: 1, max: 5 }),
-      review_scores_value: faker.number.int({ min: 1, max: 5 }),
-      review_scores_rating: faker.number.int({ min: 1, max: 5 }),
+      review_scores_accuracy: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_cleanliness: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_checkin: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_communication: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_location: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_value: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_rating: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
     },
     detail: [
       {

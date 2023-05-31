@@ -6,6 +6,8 @@ type LabelProps = {
   fontWeight?: string
 }
 export const StyledLabel = styled.label<LabelProps>`
+  display: flex;
+  align-items: center;
   color: ${({ color, theme }) => theme.colors[color || 'normal-text']};
   font-size: ${({ size, theme }) => theme.sizes[size || 'font-size-l']};
   font-weight: ${({ fontWeight, theme }) =>
@@ -13,6 +15,8 @@ export const StyledLabel = styled.label<LabelProps>`
 `
 
 export const StyledAnchor = styled.label<LabelProps>`
+  display: flex;
+  align-items: center;
   color: ${({ color, theme }) => theme.colors[color || 'normal-text']};
   font-size: ${({ size, theme }) => theme.sizes[size || 'font-size-l']};
   text-decoration: underline;

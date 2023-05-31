@@ -24,6 +24,7 @@ export const StyledImage = styled.img`
 export const ImageWrapper = styled.div`
   width: 325px;
   height: 300px;
+  cursor: pointer;
 
   @media (max-width: 688px) {
     width: 525px;
@@ -34,12 +35,14 @@ export const ImageWrapper = styled.div`
 export const CardSection = styled.div`
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 
   & > header {
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
+    cursor: pointer;
 
     strong {
       display: flex;
@@ -55,6 +58,7 @@ export const CardSection = styled.div`
     word-wrap: break-word;
     overflow: hidden;
     white-space: nowrap;
+    cursor: pointer;
   }
 `
 export const WishlistButton = styled.button<{

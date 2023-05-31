@@ -16,3 +16,10 @@ export const getPage = async (query: any) => {
   })
   return [data, headers['x-total-count']] as [Listing[], number]
 }
+
+export const getOne = async (id: string) => {
+  const { data } = (await axios.get(`${baseUrl}/listing/${id}`)) as {
+    data: Listing
+  }
+  return [data]
+}

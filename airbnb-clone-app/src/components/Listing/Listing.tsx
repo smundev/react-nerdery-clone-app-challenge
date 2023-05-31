@@ -53,7 +53,7 @@ export const Listing = () => {
                 hostJob={item.host.host_work_info}
                 images={item.images}
                 price={item.price}
-                rating={item.rating}
+                rating={item.reviews.review_scores.review_scores_rating}
                 isWishlisted={findWishListByID(wishlist, item.id)}
                 ref={objectRef}
               />
@@ -67,7 +67,7 @@ export const Listing = () => {
               hostJob={item.host.host_work_info}
               images={item.images}
               price={item.price}
-              rating={item.rating}
+              rating={item.reviews.review_scores.review_scores_rating}
               isWishlisted={findWishListByID(wishlist, item.id)}
             />
           )

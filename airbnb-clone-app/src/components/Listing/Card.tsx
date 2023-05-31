@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md'
 import { Login } from '../Auth/Login'
 import { useWishlist } from '../../hooks/useWishlist'
+import { useNavigate } from 'react-router-dom'
 
 type CardProps = {
   idListing: string
@@ -44,6 +45,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     const [wishListed, setWishListed] = useState(isWishlisted)
     const [toggleLogin, , LoginForm] = Login()
     const { addItemToWishList, removeItemFromWishList } = useWishlist()
+    const navigate = useNavigate()
+
     const handleWishlist = () => {
       if (!wishListed)
         addItemToWishList(idListing, title, images[0], toggleLogin).then(
@@ -63,6 +66,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           setWishListed(null)
         }
       })
+    }
+
+    const handleListing = (event: any) => {
+      event.stopPropagation()
+      navigate(`/listing/${idListing}`)
     }
 
     return (
@@ -88,12 +96,12 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             transitionTime={500}
           >
             {images.map((image) => (
-              <ImageWrapper key={uuidv4()}>
+              <ImageWrapper key={uuidv4()} onClick={handleListing}>
                 <StyledImage alt={title} src={image} />
               </ImageWrapper>
             ))}
           </Carousel>
-          <CardSection>
+          <CardSection onClick={handleListing}>
             <header>
               <strong>{title}</strong>
               <strong>

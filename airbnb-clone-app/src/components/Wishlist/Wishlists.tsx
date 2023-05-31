@@ -4,6 +4,7 @@ import { StyledLabel } from '../Common/Typography.styled'
 import styled from 'styled-components'
 import { Flex } from '../Common/Flex.styled'
 import { IoMdRemoveCircle } from 'react-icons/io'
+import { useNavigate } from 'react-router-dom'
 
 const WishListWrapper = styled.div`
   display: flex;
@@ -23,6 +24,11 @@ const WishListWrapper = styled.div`
     height: 250px;
     object-fit: fill;
     border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.7;
+      transition: opacity 0.2s ease-in-out;
+    }
   }
 
   div > div {
@@ -45,9 +51,14 @@ const WishListWrapper = styled.div`
 
 export const Wishlists = () => {
   const { wishlist, removeItemFromWishList } = useWishlist()
+  const navigate = useNavigate()
 
   const handleRemoveWishlist = (id: string) => {
     removeItemFromWishList(parseInt(id))
+  }
+
+  const handleListing = (idListing: string) => {
+    navigate(`/listing/${idListing}`)
   }
 
   return (
@@ -59,7 +70,11 @@ export const Wishlists = () => {
         <WishListWrapper>
           {wishlist.map((item) => (
             <div key={item.id}>
-              <img src={item.picture_url} alt={item.name} />
+              <img
+                src={item.picture_url}
+                alt={item.name}
+                onClick={() => handleListing(item.listing_id)}
+              />
               <div>
                 <StyledLabel size="font-size-l" fontWeight="font-weight-bold">
                   {item.name}

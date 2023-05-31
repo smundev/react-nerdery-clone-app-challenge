@@ -96,7 +96,6 @@ export type Listing = {
   cleaning_fee: number
   extra_people: number
   guests_included: number
-  rating: number
   images: Image
   address: Address
   host: Host
