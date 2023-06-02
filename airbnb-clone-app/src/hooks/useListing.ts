@@ -43,25 +43,14 @@ export const useListing = (queryParam: URLSearchParams) => {
   }
 
   const getPaginatedListing = async () => {
-    setLoading(true)
-    queryParam.append('_page', page.current.toString())
-    const query_filters = Object.fromEntries(queryParam.entries())
-    await getPage(query_filters)
-      .then((data) => {
-        const [paginatedData, totalCount] = data
-        setData((prevData) => {
-          updateCountAndPage(prevData, paginatedData, totalCount)
-          return [...prevData, ...paginatedData]
-        })
-        setLoading(false)
-        setError(null)
-      })
-      .catch((e) => {
-        console.error(e.message)
-        setLoading(false)
-        setError('An error has ocurred while trying to get the listing page')
-        setData([])
-        setHasMore(false)
+    try {
+      setLoading(true)
+      queryParam.append('_page', page.current.toString())
+      const query_filters = Object.fromEntries(queryParam.entries())
+      const [paginatedData, totalCount] = await getPage(query_filters)
+      setData((prevData) => {
+        updateCountAndPage(prevData, paginatedData, totalCount)
+        return [...prevData, ...paginatedData]
       })
   }
 
