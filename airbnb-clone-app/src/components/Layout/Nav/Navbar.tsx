@@ -17,26 +17,20 @@ import { StyledLogo, StyledNavbar } from './StyledNavbar.styled'
 
 import { FiSearch } from 'react-icons/fi'
 import { RiEqualizerLine } from 'react-icons/ri'
-import { useToggle } from '../../../hooks/useToggle'
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import { Flex } from '../../Common/Flex.styled'
 import { StickyWrapper } from '../../Common/StickyWrapper'
 import { UserMenu } from './UserMenu'
 import { useClickedOutside } from '../../../hooks/useClickedOutside'
 import { FloatingMenuWrapper } from '../../Common/FloatingMenu.styled'
 import { Link, useSearchParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 import { IoSearchCircle } from 'react-icons/io5'
 import { Separator } from '../../Common/Input.styled'
 import { StyledAnchor, StyledLabel } from '../../Common/Typography.styled'
 import { HorizontalStep } from '../../Common/HorizontalStep'
 import DateRangeSelector from './DateRangeSelector'
-
-const SEARCH_CRITERIA = {
-  ANYWHERE: 'ANY',
-  ANY_WEEK: 'WEEK',
-  ADD_GUESTS: 'GUESTS',
-}
+import { reducer, initialState } from './Navbar.state'
+import { formatDate } from '../../../utils/utils'
 
 const REGION_SEARCH_CRITERIA = {
   FLEXIBLE: { label: 'Flexible', code: '' },
@@ -47,169 +41,135 @@ const REGION_SEARCH_CRITERIA = {
   USA: { label: 'USA', code: 'US' },
 }
 
-const TOGGLE_MENU_OPTIONS = {
-  COUNTRY: 'COUNTRY',
-  GUESTS: 'GUESTS',
-  DATES: 'DATES',
-  CLOSE_ALL: 'ALL',
-}
-
 export const Navbar = () => {
-  const [isExpanded, toggleIsExpanded] = useToggle(false)
-  const [countryMenuOpen, toggleCountryMenuOpen] = useToggle(false)
-  const [guestsMenuOpen, toggleGuestsMenuOpen] = useToggle(false)
-  const [datesMenuOpen, toggleDatesMenuOpen] = useToggle(false)
-  const [region, setRegion] = useState<{ label: string; code: string } | null>(
-    null
-  )
-  const [manualLocation, setManualLocation] = useState('')
-  const [adults, setAdults] = useState(0)
-  const [children, setChildren] = useState(0)
-  const [infants, setInfants] = useState(0)
-  const [pets, setPets] = useState(0)
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const [, setSearchParams] = useSearchParams()
 
   const [clickedOutsideAdvancedSearch, componentRef] = useClickedOutside({
-    dependencies: [isExpanded],
+    dependencies: [state],
   })
-
-  const handleToggleMenu = (menu: string) => {
-    switch (menu) {
-      case TOGGLE_MENU_OPTIONS.COUNTRY:
-        toggleCountryMenuOpen()
-        if (guestsMenuOpen) toggleGuestsMenuOpen()
-        if (datesMenuOpen) toggleDatesMenuOpen()
-        break
-      case TOGGLE_MENU_OPTIONS.GUESTS:
-        toggleGuestsMenuOpen()
-        if (countryMenuOpen) toggleCountryMenuOpen()
-        if (datesMenuOpen) toggleDatesMenuOpen()
-        break
-      case TOGGLE_MENU_OPTIONS.DATES:
-        toggleDatesMenuOpen()
-        if (countryMenuOpen) toggleCountryMenuOpen()
-        if (guestsMenuOpen) toggleGuestsMenuOpen()
-        break
-      case TOGGLE_MENU_OPTIONS.CLOSE_ALL:
-        if (guestsMenuOpen) toggleGuestsMenuOpen()
-        if (countryMenuOpen) toggleCountryMenuOpen()
-        break
-    }
-  }
-
-  const handleSearch = (tab: string) => {
-    handleToggleMenu(tab)
-
-    if (!isExpanded) {
-      toggleIsExpanded()
-    }
-  }
 
   const handleManualLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation()
-    setRegion(null)
-    handleToggleMenu(TOGGLE_MENU_OPTIONS.CLOSE_ALL)
-    setManualLocation(event.target.value)
+    dispatch({ type: 'CLOSE_ALL_FILTERS' })
+    dispatch({ type: 'SET_REGION', payload: null })
+    dispatch({ type: 'SET_MANUAL_LOCATION', payload: event.target.value })
   }
 
   const updateCountry = (selectedRegion: { label: string; code: string }) => {
     if (selectedRegion.code === REGION_SEARCH_CRITERIA.FLEXIBLE.code) {
-      setRegion(null)
+      dispatch({ type: 'SET_REGION', payload: null })
     } else {
-      setRegion(selectedRegion)
+      dispatch({ type: 'SET_REGION', payload: selectedRegion })
     }
-    setManualLocation(selectedRegion.label)
-    handleToggleMenu(TOGGLE_MENU_OPTIONS.CLOSE_ALL)
+    dispatch({ type: 'SET_MANUAL_LOCATION', payload: selectedRegion.label })
+    dispatch({ type: 'TOGGLE_COUNTRY_MENU_OPEN' })
   }
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        if (isExpanded) toggleIsExpanded()
+        if (state.isExpanded) dispatch({ type: 'TOGGLE_IS_EXPANDED' })
       }
-      handleToggleMenu(TOGGLE_MENU_OPTIONS.CLOSE_ALL)
     }
 
     window.addEventListener('keydown', handleEsc)
     return () => {
       window.removeEventListener('keydown', handleEsc)
     }
-  }, [isExpanded])
+  }, [state.isExpanded])
 
   useEffect(() => {
-    if (isExpanded && !datesMenuOpen && clickedOutsideAdvancedSearch) {
-      toggleIsExpanded()
-      handleToggleMenu(TOGGLE_MENU_OPTIONS.CLOSE_ALL)
+    if (state.isExpanded && clickedOutsideAdvancedSearch) {
+      dispatch({ type: 'TOGGLE_IS_EXPANDED' })
+      dispatch({ type: 'CLOSE_ALL' })
     }
   }, [clickedOutsideAdvancedSearch])
 
-  const handleAdvancedSearch = () => {
-    handleToggleMenu(TOGGLE_MENU_OPTIONS.CLOSE_ALL)
-    const accommodates = adults + children
+  const updateSearchParams = () => {
+    const accommodates = state.adults + state.children
+    const params = new URLSearchParams()
 
-    if (accommodates > 0)
-      searchParams.set('accommodates_gte', accommodates.toString())
-    else searchParams.delete('accommodates_gte')
+    params[accommodates > 0 ? 'set' : 'delete'](
+      'accommodates_gte',
+      accommodates.toString()
+    )
 
-    if (region) {
-      searchParams.set('address.country_code', region.code)
-      searchParams.delete('address.country')
+    if (state.region) {
+      params.set('address.country_code', state.region.code)
+      params.delete('address.country')
     } else {
-      searchParams.delete('address.country_code')
-      if (manualLocation !== REGION_SEARCH_CRITERIA.FLEXIBLE.label)
-        searchParams.set('address.country', manualLocation)
-      else searchParams.delete('address.country')
+      params.delete('address.country_code')
+      if (
+        state.manualLocation &&
+        state.manualLocation !== REGION_SEARCH_CRITERIA.FLEXIBLE.label
+      ) {
+        params.set('address.country', state.manualLocation)
+      } else {
+        params.delete('address.country')
+      }
     }
 
-    navigate({
-      pathname: '/',
-      search: searchParams.toString(),
-    })
+    return params.toString()
+  }
+
+  const handleAdvancedSearch = () => {
+    dispatch({ type: 'CLOSE_ALL_FILTERS' })
+    const updatedSearchParams = updateSearchParams()
+    setSearchParams(updatedSearchParams)
   }
 
   return (
     <StickyWrapper zIndex={2} ref={componentRef}>
       <Flex direction="column" gap="15px">
-        <StyledNavbar visible={isExpanded}>
-          <Link to="/">
+        <StyledNavbar visible={state.isExpanded}>
+          <Link to="/" reloadDocument>
             <StyledLogo />
           </Link>
-          <Navigation visible={!isExpanded}>
+          <Navigation visible={!state.isExpanded}>
             <div>
               <FiSearch />
               <ButtonLink
                 fontWeight="bold"
-                onClick={() => handleSearch(TOGGLE_MENU_OPTIONS.COUNTRY)}
+                onClick={() => dispatch({ type: 'TOGGLE_COUNTRY_MENU_OPEN' })}
               >
-                Anywhere
+                {state.manualLocation ? state.manualLocation : 'Anywhere'}
                 <span>Any week . Add guests</span>
               </ButtonLink>
               <Divider />
               <ButtonLink
                 fontWeight="bold"
-                onClick={() => handleSearch(TOGGLE_MENU_OPTIONS.DATES)}
+                onClick={() => dispatch({ type: 'TOGGLE_DATES_MENU_OPEN' })}
               >
-                Any week
+                {state.dates.startDate
+                  ? `${formatDate(state.dates.startDate)}
+                    ${
+                      state.dates.endDate
+                        ? ` - ${formatDate(state.dates.endDate)}`
+                        : ''
+                    }`
+                  : 'Any week'}
               </ButtonLink>
               <Divider />
               <ButtonLink
                 fontWeight="bold"
                 color="neutral-06"
-                onClick={() => handleSearch(TOGGLE_MENU_OPTIONS.GUESTS)}
+                onClick={() => dispatch({ type: 'TOGGLE_GUESTS_MENU_OPEN' })}
               >
-                Add guests
+                {state.adults + state.children + state.infants > 0
+                  ? `${state.adults + state.children + state.infants} guests`
+                  : 'Add guests'}
               </ButtonLink>
               <StyledFilter>
                 <RiEqualizerLine />
               </StyledFilter>
             </div>
             <IoSearchCircle
-              onClick={() => handleSearch(SEARCH_CRITERIA.ANYWHERE)}
+              onClick={() => dispatch({ type: 'TOGGLE_COUNTRY_MENU_OPEN' })}
               size={35}
             />
           </Navigation>
-          <StyledExpandedNavbar visible={isExpanded}>
+          <StyledExpandedNavbar visible={state.isExpanded}>
             <button>Stays</button>
             <button>Experiences</button>
             <button>Online Experiences</button>
@@ -225,24 +185,24 @@ export const Navbar = () => {
 
           <UserMenu />
         </StyledNavbar>
-        <StyledExpandedSearch visible={isExpanded}>
+        <StyledExpandedSearch visible={state.isExpanded}>
           <SearchButtonWrapper>
             <ExpandedMenuWrapper>
               <SearchOption
-                onClick={() => handleToggleMenu(TOGGLE_MENU_OPTIONS.COUNTRY)}
+                onClick={() => dispatch({ type: 'TOGGLE_COUNTRY_MENU_OPEN' })}
               >
                 Where
                 {
                   <input
                     type="text"
                     placeholder="Search destinations"
-                    value={manualLocation}
+                    value={state.manualLocation}
                     onChange={handleManualLocation}
                   />
                 }
               </SearchOption>
               <FloatingMenuWrapper
-                expanded={countryMenuOpen}
+                expanded={state.countryMenuOpen}
                 left="0"
                 margin="10px 10px"
               >
@@ -252,7 +212,8 @@ export const Navbar = () => {
                       updateCountry(REGION_SEARCH_CRITERIA.FLEXIBLE)
                     }
                     isSelected={
-                      region?.code === REGION_SEARCH_CRITERIA.FLEXIBLE.code
+                      state.region?.code ===
+                      REGION_SEARCH_CRITERIA.FLEXIBLE.code
                     }
                   >
                     <img
@@ -267,7 +228,7 @@ export const Navbar = () => {
                   <StyledCountry
                     onClick={() => updateCountry(REGION_SEARCH_CRITERIA.EUROPE)}
                     isSelected={
-                      region?.code === REGION_SEARCH_CRITERIA.EUROPE.code
+                      state.region?.code === REGION_SEARCH_CRITERIA.EUROPE.code
                     }
                   >
                     <img
@@ -284,7 +245,8 @@ export const Navbar = () => {
                       updateCountry(REGION_SEARCH_CRITERIA.GUATEMALA)
                     }
                     isSelected={
-                      region?.code === REGION_SEARCH_CRITERIA.GUATEMALA.code
+                      state.region?.code ===
+                      REGION_SEARCH_CRITERIA.GUATEMALA.code
                     }
                   >
                     <img
@@ -301,7 +263,8 @@ export const Navbar = () => {
                       updateCountry(REGION_SEARCH_CRITERIA.SOUTH_AMERICA)
                     }
                     isSelected={
-                      region?.code === REGION_SEARCH_CRITERIA.SOUTH_AMERICA.code
+                      state.region?.code ===
+                      REGION_SEARCH_CRITERIA.SOUTH_AMERICA.code
                     }
                   >
                     <img
@@ -316,7 +279,7 @@ export const Navbar = () => {
                   <StyledCountry
                     onClick={() => updateCountry(REGION_SEARCH_CRITERIA.MEXICO)}
                     isSelected={
-                      region?.code === REGION_SEARCH_CRITERIA.MEXICO.code
+                      state.region?.code === REGION_SEARCH_CRITERIA.MEXICO.code
                     }
                   >
                     <img
@@ -331,7 +294,7 @@ export const Navbar = () => {
                   <StyledCountry
                     onClick={() => updateCountry(REGION_SEARCH_CRITERIA.USA)}
                     isSelected={
-                      region?.code === REGION_SEARCH_CRITERIA.USA.code
+                      state.region?.code === REGION_SEARCH_CRITERIA.USA.code
                     }
                   >
                     <img
@@ -347,23 +310,27 @@ export const Navbar = () => {
             </ExpandedMenuWrapper>
             <ExpandedDatesWrapper>
               <SearchOption
-                onClick={() => handleToggleMenu(TOGGLE_MENU_OPTIONS.DATES)}
+                onClick={() => dispatch({ type: 'TOGGLE_DATES_MENU_OPEN' })}
               >
                 Check in
                 <StyledLabel size="font-size-m" color="neutral-07">
-                  Add dates
+                  {state.dates.startDate
+                    ? formatDate(state.dates.startDate)
+                    : 'Add dates'}
                 </StyledLabel>
               </SearchOption>
               <SearchOption
-                onClick={() => handleToggleMenu(TOGGLE_MENU_OPTIONS.DATES)}
+                onClick={() => dispatch({ type: 'TOGGLE_DATES_MENU_OPEN' })}
               >
                 Check out
                 <StyledLabel size="font-size-m" color="neutral-07">
-                  Add dates
+                  {state.dates.endDate
+                    ? formatDate(state.dates.endDate)
+                    : 'Add dates'}
                 </StyledLabel>
               </SearchOption>
               <FloatingMenuWrapper
-                expanded={datesMenuOpen}
+                expanded={state.datesMenuOpen}
                 left="0"
                 margin="70px 10px"
               >
@@ -371,7 +338,15 @@ export const Navbar = () => {
                   <DatesWrapper>
                     <Flex direction="row">
                       <Flex direction="column">
-                        <DateRangeSelector />
+                        <DateRangeSelector
+                          onDateChange={(e) => {
+                            const [updatedDates] = e
+                            dispatch({
+                              type: 'SET_DATES',
+                              payload: updatedDates,
+                            })
+                          }}
+                        />
                       </Flex>
                     </Flex>
                   </DatesWrapper>
@@ -381,16 +356,20 @@ export const Navbar = () => {
 
             <ExpandedMenuWrapper>
               <SearchOption
-                onClick={() => handleToggleMenu(TOGGLE_MENU_OPTIONS.GUESTS)}
+                onClick={() => dispatch({ type: 'TOGGLE_GUESTS_MENU_OPEN' })}
               >
                 <Flex direction="row">
                   <Flex direction="column">
                     Who
-                    {adults + infants + pets + children > 0 ? (
+                    {state.adults +
+                      state.infants +
+                      state.pets +
+                      state.children >
+                    0 ? (
                       <StyledLabel size="font-size-m">
-                        {adults + children} guests{' '}
-                        {infants > 0 && `, ${infants} infants`}{' '}
-                        {pets > 0 && `, ${pets} pets`}
+                        {state.adults + state.children} guests
+                        {state.infants > 0 && `, ${state.infants} infants`}
+                        {state.pets > 0 && `, ${state.pets} pets`}
                       </StyledLabel>
                     ) : (
                       <StyledLabel size="font-size-m" color="neutral-07">
@@ -409,7 +388,7 @@ export const Navbar = () => {
                 </Flex>
               </SearchOption>
               <FloatingMenuWrapper
-                expanded={guestsMenuOpen}
+                expanded={state.guestsMenuOpen}
                 right="0"
                 margin="10px 10px"
               >
@@ -423,7 +402,9 @@ export const Navbar = () => {
                         </StyledLabel>
                       </Flex>
                       <HorizontalStep
-                        onStepChange={(step) => setAdults(step)}
+                        onStepChange={(step) =>
+                          dispatch({ type: 'SET_ADULTS', payload: step })
+                        }
                       />
                     </Flex>
                     <Separator />
@@ -435,7 +416,9 @@ export const Navbar = () => {
                         </StyledLabel>
                       </Flex>
                       <HorizontalStep
-                        onStepChange={(step) => setChildren(step)}
+                        onStepChange={(step) =>
+                          dispatch({ type: 'SET_CHILDREN', payload: step })
+                        }
                       />
                     </Flex>
                     <Separator />
@@ -447,7 +430,9 @@ export const Navbar = () => {
                         </StyledLabel>
                       </Flex>
                       <HorizontalStep
-                        onStepChange={(step) => setInfants(step)}
+                        onStepChange={(step) =>
+                          dispatch({ type: 'SET_INFANTS', payload: step })
+                        }
                       />
                     </Flex>
                     <Separator />
@@ -458,7 +443,11 @@ export const Navbar = () => {
                           Bringing a service animal?
                         </StyledAnchor>
                       </Flex>
-                      <HorizontalStep onStepChange={(step) => setPets(step)} />
+                      <HorizontalStep
+                        onStepChange={(step) =>
+                          dispatch({ type: 'SET_PETS', payload: step })
+                        }
+                      />
                     </Flex>
                   </GuestsWrapper>
                 </ExpandedMenuWrapper>

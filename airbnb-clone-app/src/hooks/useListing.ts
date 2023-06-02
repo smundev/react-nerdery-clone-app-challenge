@@ -39,7 +39,7 @@ export const useListing = (queryParam: URLSearchParams) => {
     if (hasRemainingData) page.current++
   }
 
-  const getPageListing = async () => {
+  const getPaginatedListing = async () => {
     try {
       setLoading(true)
       queryParam.append('_page', page.current.toString())
@@ -86,7 +86,7 @@ export const useListing = (queryParam: URLSearchParams) => {
     error,
     hasMore,
     getAllListing,
-    getPageListing,
+    getPaginatedListing,
     getOneListing,
     resetData,
   }

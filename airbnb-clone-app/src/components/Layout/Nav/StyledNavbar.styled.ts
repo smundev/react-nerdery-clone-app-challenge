@@ -52,7 +52,7 @@ export const Navigation = styled.div<NavigationProps>`
   flex-direction: row;
   align-items: center;
   margin-left: auto;
-  width: 350px;
+  width: auto;
   padding: 8px 8px 8px 18px;
   background: ${({ theme }) => theme.colors.body};
   border: 1px solid ${({ theme }) => theme.colors['neutral-03']};

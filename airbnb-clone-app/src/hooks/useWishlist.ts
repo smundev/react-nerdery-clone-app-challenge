@@ -8,12 +8,11 @@ import { WishList } from '../api/wishlist/types'
 import { useAuthContext } from '../context/AuthContext'
 
 export const useWishlist = () => {
-  const { user, openLogin } = useAuthContext()
+  const { user, openLogin, logOut } = useAuthContext()
   const [wishlist, setWishlist] = useState<WishList[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
-
   useEffect(() => {
     if (!user) {
       setWishlist([])
@@ -33,6 +32,10 @@ export const useWishlist = () => {
         setWishlist(data)
       } catch (e: any) {
         setError(e.message as string)
+        if (e.response?.status === 401) {
+          logOut()
+        }
+
         console.error(e)
       } finally {
         setLoading(false)
@@ -66,6 +69,9 @@ export const useWishlist = () => {
       return data
     } catch (e: any) {
       setError(e.message as string)
+      if (e.response?.status === 401) {
+        logOut()
+      }
     } finally {
       setLoading(false)
     }
