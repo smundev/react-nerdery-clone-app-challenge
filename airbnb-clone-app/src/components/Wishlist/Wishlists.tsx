@@ -52,9 +52,7 @@ const WishListWrapper = styled.div`
 `
 
 const Wishlists = () => {
-  const { getMyWishList, removeItemFromWishList } = useWishlist()
-  const [wishlist, setWishlist] = useState<WishList[]>([])
-  const [lastUpdated, setLastUpdated] = useState(Date.now())
+  const { wishlist, removeItemFromWishList } = useWishlist()
   const navigate = useNavigate()
 
   useEffect(() => {
