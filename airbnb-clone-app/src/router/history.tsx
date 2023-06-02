@@ -1,8 +1,11 @@
+import { Suspense, lazy } from 'react'
 import { Navigate, createBrowserRouter, useLocation } from 'react-router-dom'
 import { Home } from '../components/Home/Home'
-import { Wishlists } from '../components/Wishlist/Wishlists'
-import { Detail } from '../components/Listing/Detail/Detail'
 import { useAuthContext } from '../context/AuthContext'
+
+const Wishlists = lazy(() => import('../components/Wishlist/Wishlists'))
+const Detail = lazy(() => import('../components/Listing/Detail/Detail'))
+
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   let location = useLocation()
   const { user, loading } = useAuthContext()
@@ -27,12 +30,18 @@ export const router = createBrowserRouter([
     path: '/wishlist',
     element: (
       <PrivateRoute>
-        <Wishlists />
+        <Suspense fallback="Loading wishlist...">
+          <Wishlists />
+        </Suspense>
       </PrivateRoute>
     ),
   },
   {
     path: '/listing/:id',
-    element: <Detail />,
+    element: (
+      <Suspense fallback="Loading listing detail...">
+        <Detail />
+      </Suspense>
+    ),
   },
 ])
