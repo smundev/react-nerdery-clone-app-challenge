@@ -49,7 +49,7 @@ const WishListWrapper = styled.div`
   }
 `
 
-export const Wishlists = () => {
+const Wishlists = () => {
   const { wishlist, removeItemFromWishList } = useWishlist()
   const navigate = useNavigate()
 
@@ -91,3 +91,5 @@ export const Wishlists = () => {
     </Layout>
   )
 }
+
+export default Wishlists

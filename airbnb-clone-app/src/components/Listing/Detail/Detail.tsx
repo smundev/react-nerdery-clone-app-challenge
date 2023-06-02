@@ -19,7 +19,7 @@ import {
   ReviewUser,
 } from './Detail.styled'
 
-export const Detail = () => {
+const Detail = () => {
   const [searchParams] = useSearchParams()
   const { data, loading, error, getOneListing } = useListing(searchParams)
   const [listing] = data
@@ -272,3 +272,5 @@ export const Detail = () => {
     </Layout>
   )
 }
+
+export default Detail
