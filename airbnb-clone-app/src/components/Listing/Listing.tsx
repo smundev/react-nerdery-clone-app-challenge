@@ -6,7 +6,7 @@ import { useObserveElement } from '../../hooks/useObserveElement'
 import { useSearchParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { useWishlist } from '../../hooks/useWishlist'
-import { findWishListByID } from '../../utils/array'
+import { findWishListByID } from '../../utils/utils'
 
 const ListingContainer = styled.section`
   display: flex;
@@ -24,7 +24,8 @@ const ListingContainer = styled.section`
 
 export const Listing = () => {
   const [searchParams] = useSearchParams()
-  const { data, loading, getPageListing, hasMore } = useListing(searchParams)
+  const { data, loading, getPaginatedListing, hasMore } =
+    useListing(searchParams)
   const { wishlist } = useWishlist()
   const { objectVisible, objectRef } = useObserveElement({
     loading,
@@ -36,7 +37,7 @@ export const Listing = () => {
   }, [searchParams])
 
   useEffect(() => {
-    getPageListing()
+    getPaginatedListing()
   }, [objectVisible, searchParams])
 
   return (
