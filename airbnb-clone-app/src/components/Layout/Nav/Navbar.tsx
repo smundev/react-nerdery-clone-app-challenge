@@ -45,9 +45,10 @@ export const Navbar = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [, setSearchParams] = useSearchParams()
 
-  const [clickedOutsideAdvancedSearch, componentRef] = useClickedOutside({
-    dependencies: [state],
-  })
+  const [clickedOutsideAdvancedSearch, componentRef] =
+    useClickedOutside<HTMLDivElement>({
+      dependencies: [state],
+    })
 
   const handleManualLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation()

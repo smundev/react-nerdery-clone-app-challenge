@@ -4,21 +4,18 @@ type Props = {
   dependencies: React.DependencyList
 }
 
-type UseClickedOutsideReturn = [
-  boolean,
-  React.MutableRefObject<HTMLDivElement | null>
-]
+type UseClickedOutsideReturn<T> = [boolean, React.RefObject<T>]
 
-export const useClickedOutside = ({
+export const useClickedOutside = <T>({
   dependencies,
-}: Props): UseClickedOutsideReturn => {
-  const componentRef = useRef<HTMLDivElement | null>(null)
+}: Props): UseClickedOutsideReturn<T> => {
+  const componentRef = useRef<T>(null)
   const [clickedOutside, setClickedOutside] = useState(false)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const clickOutside =
-        (componentRef.current &&
+        (componentRef.current instanceof HTMLElement &&
           !componentRef.current.contains(event.target as Node)) ||
         false
 
