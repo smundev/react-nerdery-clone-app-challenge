@@ -1,9 +1,3 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/" },
-    { "source": "/(.*)", "destination": "/" },
-    { "source": "/listing", "destination": "/listing" },
-    { "source": "/home", "destination": "/home" },
-    { "source": "/wishlist", "destination": "/wishlist" }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
