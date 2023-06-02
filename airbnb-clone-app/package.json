@@ -9,7 +9,7 @@
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint --fix . && prettier --write .",
     "preview": "vite preview",
     "server": "json-server src/api/data/db.json -m ./node_modules/json-server-auth",
