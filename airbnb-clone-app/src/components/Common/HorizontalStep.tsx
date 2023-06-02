@@ -46,7 +46,7 @@ export const HorizontalStep = ({
 
   useEffect(() => {
     onStepChange(step)
-  }, [step, onStepChange])
+  }, [step])
 
   return (
     <HorizontalStepContainer>
