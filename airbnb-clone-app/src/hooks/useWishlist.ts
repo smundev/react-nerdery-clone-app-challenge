@@ -7,24 +7,40 @@ import { useAuthContext } from '../context/AuthContext'
 
 export const useWishlist = () => {
   const { user, openLogin, logOut } = useAuthContext()
+  const [wishlist, setWishlist] = useState<WishList[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  useEffect(() => {
+    if (!user) {
+      setWishlist([])
+      return
+    }
 
-  const getMyWishList = async () => {
-    if (!user) return []
-    return await getWishList(
-      {
-        user: user.user.id,
-      },
-      user.accessToken
-    )
-      .then((data) => data)
-      .catch((e) => {
-        console.error(e.message as string)
+    const getMyWishList = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await getWishList(
+          {
+            user: user.user.id,
+          },
+          user.accessToken
+        )
+        setWishlist(data)
+      } catch (e: any) {
+        setError(e.message as string)
         if (e.response?.status === 401) {
           logOut()
         }
-        return []
-      })
-  }
+
+        console.error(e)
+      } finally {
+        setLoading(false)
+      }
+    }
+    getMyWishList()
+  }, [lastUpdated])
 
   const addItemToWishList = async (
     listing_id: string,
@@ -47,10 +63,12 @@ export const useWishlist = () => {
       )
       return data
     } catch (e: any) {
+      setError(e.message as string)
       if (e.response?.status === 401) {
         logOut()
       }
-      console.error(e.message as string)
+    } finally {
+      setLoading(false)
     }
   }
 
