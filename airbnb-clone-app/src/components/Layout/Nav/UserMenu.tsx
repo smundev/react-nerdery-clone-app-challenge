@@ -21,7 +21,7 @@ const MENU_OPTIONS = {
 
 export const UserMenu = () => {
   const [isExpanded, toggleIsExpanded] = useToggle(false)
-  const [clickedOutside, componentRef] = useClickedOutside({
+  const [clickedOutside, componentRef] = useClickedOutside<HTMLDivElement>({
     dependencies: [isExpanded],
   })
   const { user, logOut, openLogin, openSignup } = useAuthContext()
