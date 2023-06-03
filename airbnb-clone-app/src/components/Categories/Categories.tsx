@@ -1,5 +1,3 @@
-import { RiEqualizerLine } from 'react-icons/ri'
-import { SecondaryButton } from '../Common/Button.styled'
 import { ScrollContainer } from '../Common/ScrollContainer'
 import { Card } from './Card'
 import { StyledCategory } from './Category.Styled'
