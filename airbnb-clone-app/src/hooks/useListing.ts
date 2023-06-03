@@ -14,19 +14,22 @@ export const useListing = (queryParam: URLSearchParams) => {
   }, [queryParam])
 
   const getAllListing = async () => {
-    try {
-      setLoading(true)
-      const fetchData = await getAll()
-      setData(fetchData)
-      setHasMore(fetchData.length > 0)
-      setLoading(false)
-      setError(null)
-    } catch (error) {
-      setLoading(false)
-      setError('An error has ocurred while trying to get all listing')
-      setData([])
-      setHasMore(false)
-    }
+    setLoading(true)
+    await getAll()
+      .then((data) => {
+        setData(data)
+        setHasMore(data.length > 0)
+        setLoading(false)
+        setError(null)
+      })
+
+      .catch((e) => {
+        console.error(e.message)
+        setLoading(false)
+        setError('An error has ocurred while trying to get all listing')
+        setData([])
+        setHasMore(false)
+      })
   }
 
   const updateCountAndPage = (
@@ -40,21 +43,26 @@ export const useListing = (queryParam: URLSearchParams) => {
   }
 
   const getPaginatedListing = async () => {
-    try {
-      setLoading(true)
-      queryParam.append('_page', page.current.toString())
-      const query_filters = Object.fromEntries(queryParam.entries())
-      const [paginatedData, totalCount] = await getPage(query_filters)
-      setData((prevData) => {
-        updateCountAndPage(prevData, paginatedData, totalCount)
-        return [...prevData, ...paginatedData]
+    setLoading(true)
+    queryParam.append('_page', page.current.toString())
+    const query_filters = Object.fromEntries(queryParam.entries())
+    await getPage(query_filters)
+      .then((data) => {
+        const [paginatedData, totalCount] = data
+        setData((prevData) => {
+          updateCountAndPage(prevData, paginatedData, totalCount)
+          return [...prevData, ...paginatedData]
+        })
+        setLoading(false)
+        setError(null)
       })
-      setLoading(false)
-      setError(null)
-    } catch (error) {
-      setError('An error has ocurred while trying to get the listing page')
-      resetData()
-    }
+      .catch((e) => {
+        console.error(e.message)
+        setLoading(false)
+        setError('An error has ocurred while trying to get the listing page')
+        setData([])
+        setHasMore(false)
+      })
   }
 
   const getOneListing = async (id: string) => {

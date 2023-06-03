@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef } from 'react'
 import {
   StyledCard,
   ImageWrapper,
@@ -13,7 +13,6 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { v4 as uuidv4 } from 'uuid'
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md'
-import { useWishlist } from '../../hooks/useWishlist'
 import { useNavigate } from 'react-router-dom'
 
 type CardProps = {
@@ -25,6 +24,8 @@ type CardProps = {
   price: number
   rating: number
   isWishlisted: number | null
+  addFn: (idListing: string, title: string, image_url: string) => void
+  removeFn: (idWishlisted: number) => void
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -38,30 +39,20 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       rating,
       idListing,
       isWishlisted,
+      addFn,
+      removeFn,
     }: CardProps,
     ref
   ) => {
-    const [wishListed, setWishListed] = useState(isWishlisted)
-    const { addItemToWishList, removeItemFromWishList } = useWishlist()
     const navigate = useNavigate()
-
     const handleWishlist = () => {
-      if (!wishListed)
-        addItemToWishList(idListing, title, images[0]).then((res) => {
-          if (res) {
-            setWishListed(res.id)
-          }
-        })
+      if (!isWishlisted) addFn(idListing, title, images[0])
       else handleRemoveWishlist()
     }
 
     const handleRemoveWishlist = () => {
-      if (!wishListed) return
-      removeItemFromWishList(wishListed).then((res) => {
-        if (res) {
-          setWishListed(null)
-        }
-      })
+      if (!isWishlisted) return
+      removeFn(isWishlisted)
     }
 
     const handleListing = (event: any) => {
@@ -73,11 +64,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <>
         <StyledCard ref={ref}>
           <WishlistButton
-            color={wishListed ? 'primary-01' : 'neutral-03'}
-            hoverColor={wishListed ? 'neutral-03' : 'primary-01'}
+            color={isWishlisted ? 'primary-01' : 'neutral-03'}
+            hoverColor={isWishlisted ? 'neutral-03' : 'primary-01'}
             onClick={() => handleWishlist()}
           >
-            {wishListed ? (
+            {isWishlisted ? (
               <MdOutlineFavorite size={25} />
             ) : (
               <MdOutlineFavoriteBorder size={25} />

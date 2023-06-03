@@ -1,56 +1,36 @@
-import { useEffect, useState } from 'react'
 import {
   addToWishList,
   getWishList,
   removeFromWishList,
 } from '../api/wishlist/wishlist'
-import { WishList } from '../api/wishlist/types'
 import { useAuthContext } from '../context/AuthContext'
 
 export const useWishlist = () => {
   const { user, openLogin, logOut } = useAuthContext()
-  const [wishlist, setWishlist] = useState<WishList[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
-  useEffect(() => {
-    if (!user) {
-      setWishlist([])
-      return
-    }
 
-    const getMyWishList = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const data = await getWishList(
-          {
-            user: user.user.id,
-          },
-          user.accessToken
-        )
-        setWishlist(data)
-      } catch (e: any) {
-        setError(e.message as string)
+  const getMyWishList = async () => {
+    if (!user) return []
+    return await getWishList(
+      {
+        user: user.user.id,
+      },
+      user.accessToken
+    )
+      .then((data) => data)
+      .catch((e) => {
+        console.error(e.message as string)
         if (e.response?.status === 401) {
           logOut()
         }
-
-        console.error(e)
-      } finally {
-        setLoading(false)
-      }
-    }
-    getMyWishList()
-  }, [lastUpdated])
+        return []
+      })
+  }
 
   const addItemToWishList = async (
     listing_id: string,
     name: string,
     picture_url: string
   ) => {
-    setLoading(true)
-    setError(null)
     try {
       if (!user) {
         openLogin()
@@ -65,21 +45,16 @@ export const useWishlist = () => {
         },
         user.accessToken
       )
-      setLastUpdated(new Date())
       return data
     } catch (e: any) {
-      setError(e.message as string)
       if (e.response?.status === 401) {
         logOut()
       }
-    } finally {
-      setLoading(false)
+      console.error(e.message as string)
     }
   }
 
   const removeItemFromWishList = async (id: number) => {
-    setLoading(true)
-    setError(null)
     try {
       if (!user) {
         throw new Error('Not logged in')
@@ -90,20 +65,15 @@ export const useWishlist = () => {
         },
         user.accessToken
       )
-      setLastUpdated(new Date())
       return data
     } catch (e: any) {
-      setError(e.message as string)
-    } finally {
-      setLoading(false)
+      console.error(e.message as string)
     }
   }
 
   return {
-    wishlist,
-    loading,
-    error,
     removeItemFromWishList,
     addItemToWishList,
+    getMyWishList,
   }
 }
