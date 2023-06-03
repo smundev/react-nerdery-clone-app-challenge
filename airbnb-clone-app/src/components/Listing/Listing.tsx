@@ -28,7 +28,6 @@ export const Listing = () => {
   const [searchParams] = useSearchParams()
   const { data, loading, getPaginatedListing, hasMore } =
     useListing(searchParams)
-  const { wishlist } = useWishlist()
   const { objectVisible, objectRef } = useObserveElement({
     loading,
     continueObserving: hasMore,
