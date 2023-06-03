@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { Flex } from '../Common/Flex.styled'
 import { IoMdRemoveCircle } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { WishList } from '../../api/wishlist/types'
 
 const WishListWrapper = styled.div`
   display: flex;
@@ -50,11 +52,20 @@ const WishListWrapper = styled.div`
 `
 
 const Wishlists = () => {
-  const { wishlist, removeItemFromWishList } = useWishlist()
+  const { getMyWishList, removeItemFromWishList } = useWishlist()
+  const [wishlist, setWishlist] = useState<WishList[]>([])
+  const [lastUpdated, setLastUpdated] = useState(Date.now())
   const navigate = useNavigate()
+
+  useEffect(() => {
+    getMyWishList().then((res) => {
+      setWishlist(res)
+    })
+  }, [lastUpdated])
 
   const handleRemoveWishlist = (id: string) => {
     removeItemFromWishList(parseInt(id))
+    setLastUpdated(Date.now())
   }
 
   const handleListing = (idListing: string) => {
