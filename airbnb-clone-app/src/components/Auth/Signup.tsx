@@ -33,7 +33,11 @@ export const Signup = ({ user, registerUser, error, clearErrors }: Props) => {
     control,
     reset,
     formState: { errors },
+    watch,
   } = useForm()
+
+  const email = watch('email')
+  const names = watch(['firstName', 'lastName'])
 
   const onSubmit = handleSubmit((data) => {
     registerUser({
@@ -60,6 +64,29 @@ export const Signup = ({ user, registerUser, error, clearErrors }: Props) => {
     setModalOpen(false)
     clearErrors()
     reset()
+  }
+
+  const validatePassword = (value: string) => {
+    let isValid = true
+
+    //check value does not contain names or email
+    if (names) {
+      const [firstName, lastName] = names
+      if (value.includes(firstName) || value.includes(lastName)) {
+        isValid = false
+      }
+    }
+
+    if (email && value.includes(email)) {
+      isValid = false
+    }
+
+    // Check if the password contains at least one number or a symbol
+    if (!/\d/.test(value) && !/[!@#$%^&*]/.test(value)) {
+      isValid = false
+    }
+
+    return isValid
   }
 
   const SignUpForm = () => {
@@ -113,12 +140,18 @@ export const Signup = ({ user, registerUser, error, clearErrors }: Props) => {
                     />
                   </>
                 )}
-                rules={{ required: true }}
+                rules={{
+                  required: true,
+                  validate: (value) => {
+                    const today = new Date()
+                    return value.getFullYear() <= today.getFullYear()
+                  },
+                }}
               />
 
               {errors.birthdate && (
                 <StyledInputError>
-                  <MdError size={16} /> Birthdate is required
+                  <MdError size={16} /> Invalid Birthdate
                 </StyledInputError>
               )}
               <StyledLabel color="neutral-07" size="font-size-s">
@@ -148,13 +181,31 @@ export const Signup = ({ user, registerUser, error, clearErrors }: Props) => {
               <StyledInput
                 type="password"
                 placeholder="Password"
-                {...register('password', { required: true })}
+                {...register('password', {
+                  required: true,
+                  minLength: 8,
+                  maxLength: 20,
+                  validate: validatePassword,
+                })}
                 hasError={Boolean(errors.password)}
                 border={true}
               />
               {errors.password && (
                 <StyledInputError>
-                  <MdError size={16} /> Password is required
+                  <Flex direction="column">
+                    <div>Password strength: weak</div>
+                    <div>
+                      <MdError size={16} /> Can't contain your name or email
+                      address
+                    </div>
+                    <div>
+                      <MdError size={16} /> At least 8 characters
+                    </div>
+                    <div>
+                      <MdError size={16} /> Contains a number or symbol
+                      (!@#$%^&*)
+                    </div>
+                  </Flex>
                 </StyledInputError>
               )}
               <p>
