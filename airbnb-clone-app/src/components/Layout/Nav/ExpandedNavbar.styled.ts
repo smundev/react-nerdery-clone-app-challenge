@@ -18,11 +18,12 @@ export const StyledExpandedNavbar = styled.div<Props>`
     margin: 0;
   }
 
-  button {
+  button,
+  a {
     display: flex;
     border: none;
     padding-bottom: 5px;
-
+    text-decoration: none;
     font-size: ${(props) => props.theme.sizes['font-size-l']};
     background: transparent;
 
@@ -30,16 +31,19 @@ export const StyledExpandedNavbar = styled.div<Props>`
       props.isSelected
         ? props.theme.colors['neutral-07']
         : props.theme.colors['normal-text']};
-    border-bottom: ${(props) =>
-      props.isSelected
-        ? `2px solid ${props.theme.colors['normal-text']}`
-        : 'none'};
+
     transition: all 0.1s ease;
     &:hover {
       cursor: pointer;
       color: ${(props) => props.theme.colors['neutral-07']};
       border-bottom: 2px solid ${(props) => props.theme.colors['neutral-06']};
     }
+  }
+
+  button {
+    cursor: pointer;
+    color: ${(props) => props.theme.colors['neutral-07']};
+    border-bottom: 2px solid ${(props) => props.theme.colors['neutral-06']};
   }
 `
 export const StyledExpandedSearch = styled.div<Props>`
@@ -129,6 +133,14 @@ export const SearchOption = styled.div`
 
 export const ExpandedMenuWrapper = styled.div`
   position: relative;
+
+  input:first-of-type {
+    border: none;
+    height: 20px;
+    &:focus {
+      outline: none;
+    }
+  }
 `
 export const CountriesWrapper = styled.div`
   display: flex;
