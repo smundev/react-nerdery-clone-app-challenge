@@ -39,6 +39,7 @@ export const useAuth = () => {
         'airbnb-logged-user',
         JSON.stringify(user) || ''
       )
+      window.localStorage.setItem('show-onboarding-guidelines', 'true')
       setUser(user)
       setLoading(false)
       setError(null)
@@ -54,6 +55,7 @@ export const useAuth = () => {
 
   const logOut = () => {
     window.localStorage.removeItem('airbnb-logged-user')
+    window.localStorage.removeItem('show-onboarding-guidelines')
     setError(null)
     setUser(null)
   }
