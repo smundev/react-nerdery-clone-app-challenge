@@ -68,15 +68,15 @@ export const Navbar = () => {
   }
 
   useEffect(() => {
-    const handleEsc = (event: KeyboardEvent) => {
+    const handleKeyEvent = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         if (state.isExpanded) dispatch({ type: 'TOGGLE_IS_EXPANDED' })
       }
     }
 
-    window.addEventListener('keydown', handleEsc)
+    window.addEventListener('keydown', handleKeyEvent)
     return () => {
-      window.removeEventListener('keydown', handleEsc)
+      window.removeEventListener('keydown', handleKeyEvent)
     }
   }, [state.isExpanded])
 
@@ -172,8 +172,12 @@ export const Navbar = () => {
           </Navigation>
           <StyledExpandedNavbar visible={state.isExpanded}>
             <button>Stays</button>
-            <button>Experiences</button>
-            <button>Online Experiences</button>
+            <Link
+              to="https://www.airbnb.com/s/experiences/online"
+              target="_blank"
+            >
+              Online Experiences
+            </Link>
           </StyledExpandedNavbar>
 
           <BecomeHost>
@@ -193,14 +197,19 @@ export const Navbar = () => {
                 onClick={() => dispatch({ type: 'TOGGLE_COUNTRY_MENU_OPEN' })}
               >
                 Where
-                {
+                <form
+                  onSubmit={(evt) => {
+                    evt.preventDefault()
+                    handleAdvancedSearch()
+                  }}
+                >
                   <input
                     type="text"
                     placeholder="Search destinations"
                     value={state.manualLocation}
                     onChange={handleManualLocation}
                   />
-                }
+                </form>
               </SearchOption>
               <FloatingMenuWrapper
                 expanded={state.countryMenuOpen}
