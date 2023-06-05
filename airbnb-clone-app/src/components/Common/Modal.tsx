@@ -12,9 +12,16 @@ interface ModalProps {
   onClose: () => void
   children: React.ReactNode
   title?: string
+  showHeader?: boolean
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  showHeader = true,
+}) => {
   const closeModal = () => {
     onClose()
   }
@@ -36,9 +43,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   return (
     <ModalContainer isOpen={isOpen}>
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
-        <Separator />
-        <CloseButton onClick={closeModal}>&times;</CloseButton>
+        {showHeader && (
+          <>
+            <ModalHeader>{title}</ModalHeader>
+            <Separator />
+            <CloseButton onClick={closeModal}>&times;</CloseButton>
+          </>
+        )}
         {children}
       </ModalContent>
     </ModalContainer>

@@ -3,6 +3,7 @@ import { UserResponse, SignupParams } from '../api/auth/types'
 import { useAuth } from '../hooks/useAuth'
 import { Login } from '../components/Auth/Login'
 import { Signup } from '../components/Auth/Signup'
+import { Onboarding } from '../components/Onboarding/Onboarding'
 
 type AuthContextType = {
   user: UserResponse
@@ -65,6 +66,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       {children}
       {LoginForm()}
       {SignUpForm()}
+      <Onboarding user={user} />
     </AuthContext.Provider>
   )
 }

@@ -53,7 +53,9 @@ export const SecondaryButton = styled.button<Props>`
   border-radius: 12px;
   padding: 7px 16px;
   background-color: transparent;
-  font-weight: ${(props) => props.fontWeight || 'normal'};
+  font-weight: ${({ fontWeight, theme }) =>
+    fontWeight || theme.sizes['font-weight-medium']};
+  font-size: ${({ size, theme }) => theme.sizes[size || 'font-size-l']};
   color: ${(props) =>
     props.theme.colors[props.color || 'normal-text'] || '000'};
   cursor: pointer;
