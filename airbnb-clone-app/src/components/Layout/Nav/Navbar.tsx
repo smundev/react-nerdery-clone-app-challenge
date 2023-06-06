@@ -43,7 +43,7 @@ const REGION_SEARCH_CRITERIA = {
 
 export const Navbar = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [clickedOutsideAdvancedSearch, componentRef] =
     useClickedOutside<HTMLDivElement>({
@@ -89,8 +89,7 @@ export const Navbar = () => {
 
   const updateSearchParams = () => {
     const accommodates = state.adults + state.children
-    const params = new URLSearchParams()
-
+    const params = new URLSearchParams(searchParams)
     params[accommodates > 0 ? 'set' : 'delete'](
       'accommodates_gte',
       accommodates.toString()

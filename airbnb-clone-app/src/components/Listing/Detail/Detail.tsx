@@ -31,6 +31,10 @@ const Detail = () => {
     getOneListing(id)
   }, [id])
 
+  useEffect(() => {
+    document.title = listing?.name
+  }, [listing])
+
   const handleImageClick = (e: any) => {
     window.open(e.target.src, '_blank')
   }
