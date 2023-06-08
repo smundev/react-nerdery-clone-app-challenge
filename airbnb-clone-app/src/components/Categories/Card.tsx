@@ -26,7 +26,11 @@ export const Card: React.FC<CategoryType> = ({
   }
 
   return (
-    <StyledCard onClick={updateSearchParams} isselected={selected}>
+    <StyledCard
+      role="option"
+      onClick={updateSearchParams}
+      isselected={selected}
+    >
       <Icon size={26} />
       {label}
     </StyledCard>

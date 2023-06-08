@@ -124,7 +124,7 @@ export const Navbar = () => {
       <Flex direction="column" gap="15px">
         <StyledNavbar visible={state.isExpanded}>
           <Link to="/" reloadDocument>
-            <StyledLogo />
+            <StyledLogo alt="airbnb-site-logo" />
           </Link>
           <Navigation visible={!state.isExpanded}>
             <div>

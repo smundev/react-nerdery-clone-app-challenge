@@ -1,105 +1,16 @@
 import { faker } from '@faker-js/faker'
-import * as fs from 'fs'
+import { Listing } from '../../../src/api/listing/types'
+import {
+  house_rules,
+  property_types,
+  cancellation_policy,
+  property_amenities,
+  country_codes,
+  languages,
+  host_interests,
+} from '../../../src/api/seed/seeder'
 
-import { Listing } from '../listing/types'
-
-export const property_types = [
-  'Beachfront',
-  'Cabins',
-  'Amazing Pools',
-  'Amazing views',
-  'Tropical',
-  'National Parks',
-  'Lake',
-  'Countryside',
-  'Trending',
-  'Camping',
-  'Tiny Homes',
-  'Castles',
-  'Design',
-  'OMG!',
-  'New',
-  'Mansions',
-  'Lakefront',
-  'Surfing',
-  'Luxe',
-  'Vineyards',
-  'Iconic cities',
-  'Farms',
-  'Treehouses',
-  'Skiing',
-  'Top of the world',
-  'A-frames',
-  'Windmills',
-  'Modern',
-  'Islands',
-  'Caves',
-  'Arctic',
-]
-
-export const cancellation_policy = ['flexible', 'moderate', 'strict']
-
-export const property_amenities = [
-  'TV',
-  'Cable TV',
-  'Wifi',
-  'Kitchen',
-  'Paid parking off premises',
-  'Smoking allowed',
-  'Pets allowed',
-  'Buzzer/wireless intercom',
-  'Heating',
-  'Family/kid friendly',
-  'Washer',
-  'Coffee maker',
-  'Refrigerator',
-  'Dishwasher',
-  'Dishes and silverware',
-  'Cooking basics',
-  'Oven',
-  'Stove',
-  'Cleaning before checkout',
-  'Waterfront',
-]
-export const host_interests = [
-  'Arts',
-  'Cooking',
-  'Dancing',
-  'Design',
-  'Fashion',
-  'Film',
-  'Fitness',
-  'Food',
-  'Gardening',
-  'Health',
-  'Music',
-  'Photography',
-  'Politics',
-  'Reading',
-  'Sports',
-  'Technology',
-  'Travel',
-  'Volunteering',
-  'Writing',
-]
-
-export const languages = [
-  'English',
-  'Spanish',
-  'French',
-  'Chinese',
-  'Korean',
-  'Japanese',
-  'German',
-  'Italian',
-  'Portuguese',
-]
-
-export const country_codes = ['US', 'MX', 'GT', 'SA']
-
-export const house_rules = ['No smoking', 'No pets', 'No parties or events']
-
-const generateFakeListing = (): Listing => ({
+export const generateFakeListing = (): Listing => ({
   id: faker.string.uuid(),
   listing_url: faker.internet.url(),
   name: faker.person.fullName(),
@@ -245,16 +156,3 @@ const generateFakeListing = (): Listing => ({
     ],
   },
 })
-
-export const exportSeededData = () => {
-  const randomListing: Listing[] = Array.from(
-    { length: 200 },
-    generateFakeListing
-  )
-
-  fs.writeFileSync(
-    'src/api/data/listing.json',
-    JSON.stringify(randomListing, null, 2)
-  )
-  console.log(`Listing data saved to listing.json`)
-}

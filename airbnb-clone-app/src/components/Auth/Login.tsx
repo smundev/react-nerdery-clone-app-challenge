@@ -88,7 +88,9 @@ export const Login = ({ user, error, signIn, clearErrors }: Props) => {
               <StyledInputError fontSize="font-size-m">
                 {error}
               </StyledInputError>
-              <PrimaryButton type="submit">Agree and continue</PrimaryButton>
+              <PrimaryButton role="button" type="submit">
+                Login
+              </PrimaryButton>
             </Flex>
           </form>
         </Flex>

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Listing } from './types'
 
-const baseUrl = import.meta.env.VITE_API_URL
+const baseUrl = process.env.VITE_API_URL
 
 export const getAll = async () => {
   const { data } = (await axios.get(`${baseUrl}/listing`)) as {
