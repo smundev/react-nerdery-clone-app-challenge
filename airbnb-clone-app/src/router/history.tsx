@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { Navigate, createBrowserRouter, useLocation } from 'react-router-dom'
 import { Home } from '../components/Home/Home'
 import { useAuthContext } from '../context/AuthContext'
+import { NotFound } from '../components/NotFound'
 
 const Wishlists = lazy(() => import('../components/Wishlist/Wishlists'))
 const Detail = lazy(() => import('../components/Listing/Detail/Detail'))
@@ -43,5 +44,9 @@ export const router = createBrowserRouter([
         <Detail />
       </Suspense>
     ),
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ])
