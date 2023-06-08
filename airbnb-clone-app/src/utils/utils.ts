@@ -18,3 +18,14 @@ export const formatDate = (dateObj: Date) => {
   })
   return formattedDate
 }
+
+export const isDateOneDayInPast = (date: Date) => {
+  const currentDate = new Date()
+  const currentUTCDate = new Date(currentDate.toUTCString())
+  const difference = currentUTCDate.getTime() - date.getTime()
+  const oneDayInMilliseconds = 24 * 60 * 60 * 1000 // One day in milliseconds
+
+  return (
+    difference >= oneDayInMilliseconds && difference < 2 * oneDayInMilliseconds
+  )
+}

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { login } from '../api/auth/login'
 import { signup } from '../api/auth/signup'
 import { UserResponse, SignupParams } from '../api/auth/types'
-import { AxiosError, AxiosResponse } from 'axios'
 
 const loadFromLocalStorage = () => {
   const storedUser = localStorage.getItem('airbnb-logged-user')
