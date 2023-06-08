@@ -97,6 +97,11 @@ const Wishlists = () => {
               </div>
             </div>
           ))}
+          {wishlist.length === 0 && (
+            <StyledLabel size="font-size-l" fontWeight="font-weight-bold">
+              You don't have any item in your wishlist
+            </StyledLabel>
+          )}
         </WishListWrapper>
       </Flex>
     </Layout>

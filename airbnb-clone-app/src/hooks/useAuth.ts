@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { login } from '../api/auth/login'
 import { signup } from '../api/auth/signup'
 import { UserResponse, SignupParams } from '../api/auth/types'
+import { AxiosError, AxiosResponse } from 'axios'
 
 const loadFromLocalStorage = () => {
   const storedUser = localStorage.getItem('airbnb-logged-user')
@@ -24,9 +25,13 @@ export const useAuth = () => {
       setUser(user)
       setLoading(false)
       setError(null)
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false)
-      setError('An error has ocurred while trying to login')
+      if (error?.response?.data?.includes('Cannot find user'))
+        setError('The user does not exist')
+      else if (error?.response?.data?.includes('Incorrect password'))
+        setError('The password is incorrect')
+      else setError('An error has ocurred while trying to login')
       setUser(null)
     }
   }
@@ -44,10 +49,9 @@ export const useAuth = () => {
       setLoading(false)
       setError(null)
     } catch (error: any) {
-      if (error?.response?.data?.includes('already exists'))
-        setError('The user already exists')
+      if (error?.response?.data?.includes('Email already exists'))
+        setError('The email is already in use')
       else setError('An error has ocurred while trying to create your account')
-
       setLoading(false)
       setUser(null)
     }
