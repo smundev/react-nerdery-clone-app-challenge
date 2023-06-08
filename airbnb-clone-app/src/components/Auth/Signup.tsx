@@ -16,6 +16,7 @@ import { MdError } from 'react-icons/md'
 import ReactDatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { SignupParams, UserResponse } from '../../api/auth/types'
+import { isDateOneDayInPast } from '../../utils/utils'
 
 type Props = {
   user: UserResponse
@@ -143,8 +144,7 @@ export const Signup = ({ user, registerUser, error, clearErrors }: Props) => {
                 rules={{
                   required: true,
                   validate: (value) => {
-                    const today = new Date()
-                    return value.getFullYear() <= today.getFullYear()
+                    return isDateOneDayInPast(value)
                   },
                 }}
               />
