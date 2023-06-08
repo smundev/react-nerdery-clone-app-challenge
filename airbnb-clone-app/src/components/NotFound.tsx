@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Flex } from './Common/Flex.styled'
 import { StyledLabel } from './Common/Typography.styled'
 import Layout from './Layout/Layout'
 import Lottie from 'lottie-react'

@@ -7,8 +7,8 @@ export const StyledCard = styled.div`
   gap: 1rem;
   z-index: 0;
 
-  @media (max-width: 688px) {
-    width: 525px;
+  @media (max-width: ${(props) => props.theme.responsive.mobile}) {
+    width: 325px;
   }
 
   .carousel-slider {
@@ -25,11 +25,6 @@ export const ImageWrapper = styled.div`
   width: 325px;
   height: 300px;
   cursor: pointer;
-
-  @media (max-width: 688px) {
-    width: 525px;
-    height: 500px;
-  }
 `
 
 export const CardSection = styled.div`

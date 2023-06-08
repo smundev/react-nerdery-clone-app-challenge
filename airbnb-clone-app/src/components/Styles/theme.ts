@@ -54,6 +54,7 @@ export const theme = {
     'font-weight-bold': '800',
   },
   responsive: {
-    mobile: '840px',
+    tablet: '840px',
+    mobile: '400px',
   },
 }
