@@ -65,7 +65,6 @@ export const StyledExpandedSearch = styled.div<Props>`
                                   supported by Chrome, Edge, Opera and Firefox */
 
   @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
-    display: none;
     margin: 0 0 1rem;
   }
 `
@@ -83,6 +82,13 @@ export const SearchButtonWrapper = styled.div`
   border-radius: 500px;
   transition: all 0.2s ease-out;
   cursor: pointer;
+
+  @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
+    //find and hide div with role toolbar
+    div[role='toolbar'] {
+      display: none;
+    }
+  }
 `
 
 export const SearchOption = styled.div`
@@ -149,6 +155,10 @@ export const CountriesWrapper = styled.div`
   flex-wrap: wrap;
   padding: 25px;
   gap: 16px;
+
+  @media (max-width: ${({ theme }) => theme.responsive['mobile']}) {
+    width: 300px;
+  }
 `
 
 export const StyledCountry = styled.div<{ isSelected?: boolean }>`

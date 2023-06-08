@@ -134,7 +134,13 @@ export const Navbar = () => {
                 onClick={() => dispatch({ type: 'TOGGLE_COUNTRY_MENU_OPEN' })}
               >
                 {state.manualLocation ? state.manualLocation : 'Anywhere'}
-                <span>Any week . Add guests</span>
+                {state.adults + state.children + state.infants > 0 ? (
+                  <span>
+                    {state.adults + state.children + state.infants} guests
+                  </span>
+                ) : (
+                  <span>Any week . Add guests</span>
+                )}
               </ButtonLink>
               <Divider />
               <ButtonLink
@@ -317,7 +323,7 @@ export const Navbar = () => {
                 </CountriesWrapper>
               </FloatingMenuWrapper>
             </ExpandedMenuWrapper>
-            <ExpandedDatesWrapper>
+            <ExpandedDatesWrapper role="toolbar">
               <SearchOption
                 onClick={() => dispatch({ type: 'TOGGLE_DATES_MENU_OPEN' })}
               >

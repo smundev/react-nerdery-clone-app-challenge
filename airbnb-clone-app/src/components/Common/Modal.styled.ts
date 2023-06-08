@@ -17,7 +17,8 @@ export const ModalContainer = styled.div<{ isOpen: boolean }>`
 export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  width: 568px;
+  width: clamp(100px, 100%, 568px);
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.body};
   padding: 20px;
   border-radius: 12px;
