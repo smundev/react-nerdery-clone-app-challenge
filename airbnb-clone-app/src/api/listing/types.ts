@@ -27,28 +27,28 @@ interface Host {
   host_url: string
   host_name: string
   host_location: string
-  hosting_experience_years: number
-  host_about: string
-  host_response_time: string
-  host_thumbnail_url: string
-  host_picture_url: string
-  host_school: string
-  host_fun_fact: string
-  host_breakfast: string
+  hosting_experience_years?: number
+  host_about?: string
+  host_response_time?: string
+  host_thumbnail_url?: string
+  host_picture_url?: string
+  host_school?: string
+  host_fun_fact?: string
+  host_breakfast?: string
   host_work_info: string
-  host_fav_song: string
-  host_languages: string[]
-  host_home_unique: string
-  host_birth_info: string
-  host_obssession: string
-  host_response_rate: number
-  host_is_superhost: boolean
-  host_has_profile_pic: boolean
-  host_identity_verified: boolean
-  host_listings_count: number
-  host_total_listings_count: number
-  host_interests: string[]
-  host_verifications: HostVerifications
+  host_fav_song?: string
+  host_languages?: string[]
+  host_home_unique?: string
+  host_birth_info?: string
+  host_obssession?: string
+  host_response_rate?: number
+  host_is_superhost?: boolean
+  host_has_profile_pic?: boolean
+  host_identity_verified?: boolean
+  host_listings_count?: number
+  host_total_listings_count?: number
+  host_interests?: string[]
+  host_verifications?: HostVerifications
 }
 
 interface ReviewScores {

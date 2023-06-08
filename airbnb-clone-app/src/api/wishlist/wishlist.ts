@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { WishListParams, WishList } from './types'
 
-const baseUrl = import.meta.env.VITE_API_URL
+const baseUrl = process.env.VITE_API_URL
 
 export const getWishList = async (params: WishListParams, token: string) => {
   const url = `${baseUrl}/660/wishlist`
