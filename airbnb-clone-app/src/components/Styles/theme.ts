@@ -19,8 +19,7 @@ export const theme = {
     'neutral-06': '#B0B0B0',
     'neutral-07': '#717171',
     'neutral-08': '#5E5E5E',
-    'error-01': '#FEF8F6',
-    'error-02': '#C13515',
+    'error-01': '#C13515',
     'accent-01': '#F6D7DF',
     'accent-02': '#D03660',
     discount: '#008A05',
@@ -55,6 +54,7 @@ export const theme = {
     'font-weight-bold': '800',
   },
   responsive: {
-    mobile: '840px',
+    tablet: '840px',
+    mobile: '400px',
   },
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '../Common/Modal'
 import { PrimaryButton } from '../Common/Button.styled'
 import { Flex } from '../Common/Flex.styled'
@@ -6,63 +6,154 @@ import {
   InputGroup,
   Separator,
   StyledCheckbox,
+  StyledDateInput,
   StyledInput,
+  StyledInputError,
 } from '../Common/Input.styled'
 import { StyledLabel } from '../Common/Typography.styled'
+import { Controller, useForm } from 'react-hook-form'
+import { MdError } from 'react-icons/md'
+import ReactDatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { SignupParams, UserResponse } from '../../api/auth/types'
+import { isDateOneDayInPast } from '../../utils/utils'
 
-export const Signup = () => {
+type Props = {
+  user: UserResponse
+  error: string | null
+  registerUser: (newUser: SignupParams) => void
+  clearErrors: () => void
+}
+
+export const Signup = ({ user, registerUser, error, clearErrors }: Props) => {
   const [modalOpen, setModalOpen] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [birthDate, setBirthDate] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  const openModal = () => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+    watch,
+  } = useForm()
+
+  const email = watch('email')
+  const names = watch(['firstName', 'lastName'])
+
+  const onSubmit = handleSubmit((data) => {
+    registerUser({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+      birthdate: data.birthdate,
+      agreement: data.agreement,
+    })
+  })
+
+  useEffect(() => {
+    if (!error) {
+      closeSignup()
+    }
+  }, [user])
+
+  const openSignup = () => {
     setModalOpen(true)
   }
 
-  const closeModal = () => {
+  const closeSignup = () => {
     setModalOpen(false)
+    clearErrors()
+    reset()
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Form submitted:', name, email, password, birthDate)
+  const validatePassword = (value: string) => {
+    let isValid = true
+
+    //check value does not contain names or email
+    if (names) {
+      const [firstName, lastName] = names
+      if (value.includes(firstName) || value.includes(lastName)) {
+        isValid = false
+      }
+    }
+
+    if (email && value.includes(email)) {
+      isValid = false
+    }
+
+    // Check if the password contains at least one number or a symbol
+    if (!/\d/.test(value) && !/[!@#$%^&*]/.test(value)) {
+      isValid = false
+    }
+
+    return isValid
   }
 
   const SignUpForm = () => {
     return (
-      <Modal isOpen={modalOpen} onClose={closeModal} title="Sign up">
+      <Modal isOpen={modalOpen} onClose={closeSignup} title="Sign up">
         <Flex direction="column">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={onSubmit}>
             <Flex direction="column" gap="15px">
               <InputGroup>
                 <StyledInput
                   type="text"
-                  value={firstName}
                   placeholder="First Name"
-                  onChange={(e) => setFirstName(e.target.value)}
+                  {...register('firstName', { required: true })}
+                  hasError={Boolean(errors.firstName)}
                 />
+                {errors.firstName && (
+                  <StyledInputError>
+                    <MdError size={16} /> Name is required
+                  </StyledInputError>
+                )}
                 <Separator />
                 <StyledInput
                   type="text"
-                  value={lastName}
                   placeholder="Last Name"
-                  onChange={(e) => setLastName(e.target.value)}
+                  {...register('lastName', { required: true })}
+                  hasError={Boolean(errors.lastName)}
                 />
+                {errors.lastName && (
+                  <StyledInputError>
+                    <MdError size={16} /> Last name is required
+                  </StyledInputError>
+                )}
               </InputGroup>
               <StyledLabel color="neutral-07" size="font-size-s">
                 Make sure it matches the name on your government ID.
               </StyledLabel>
 
-              <StyledInput
-                type="text"
-                value={lastName}
-                placeholder="Birthdate"
-                onChange={(e) => setBirthDate(e.target.value)}
-                border={true}
+              <Controller
+                control={control}
+                name="birthdate"
+                render={({ field: { onChange, value }, formState }) => (
+                  <>
+                    <ReactDatePicker
+                      selected={value}
+                      onChange={onChange}
+                      className="react-datepicker-wrapper"
+                      placeholderText="Select date"
+                    />
+                    <StyledDateInput
+                      hasError={Boolean(formState.errors.birthdate)}
+                    />
+                  </>
+                )}
+                rules={{
+                  required: true,
+                  validate: (value) => {
+                    return isDateOneDayInPast(value)
+                  },
+                }}
               />
+
+              {errors.birthdate && (
+                <StyledInputError>
+                  <MdError size={16} /> Invalid Birthdate
+                </StyledInputError>
+              )}
               <StyledLabel color="neutral-07" size="font-size-s">
                 To sign up, you need to be at least 18. Your birthday won’t be
                 shared with other people who use Airbnb.
@@ -70,31 +161,63 @@ export const Signup = () => {
 
               <StyledInput
                 type="email"
-                value={email}
                 placeholder="Email address"
-                onChange={(e) => setEmail(e.target.value)}
+                {...register('email', {
+                  required: true,
+                  pattern: /^\S+@\S+$/i,
+                })}
+                hasError={Boolean(errors.email)}
                 border={true}
               />
+              {errors.email && (
+                <StyledInputError>
+                  <MdError size={16} /> Invalid email or format
+                </StyledInputError>
+              )}
               <StyledLabel color="neutral-07" size="font-size-s">
                 We'll email you trip confirmations and receipts.
               </StyledLabel>
 
               <StyledInput
                 type="password"
-                value={password}
                 placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
+                {...register('password', {
+                  required: true,
+                  minLength: 8,
+                  maxLength: 20,
+                  validate: validatePassword,
+                })}
+                hasError={Boolean(errors.password)}
                 border={true}
               />
-              <StyledLabel size="font-size-m">
+              {errors.password && (
+                <StyledInputError>
+                  <Flex direction="column">
+                    <div>Password strength: weak</div>
+                    <div>
+                      <MdError size={16} /> Can't contain your name or email
+                      address
+                    </div>
+                    <div>
+                      <MdError size={16} /> At least 8 characters
+                    </div>
+                    <div>
+                      <MdError size={16} /> Contains a number or symbol
+                      (!@#$%^&*)
+                    </div>
+                  </Flex>
+                </StyledInputError>
+              )}
+              <p>
                 By selecting <strong>Agree and continue</strong>, I agree to
-                Airbnb’s
-                <a href="#"> Terms of Service, Payments Terms of Service</a>,
-                and
-                <a href="#"> Nondiscrimination Policy</a> and acknowledge the
-                <a href="#"> Privacy Policy</a>.
-              </StyledLabel>
-
+                Airbnb’s &nbsp;
+                <a href="#">Terms of Service, Payments Terms of Service</a>, and
+                &nbsp;<a href="#">Nondiscrimination Policy</a> and acknowledge
+                the&nbsp;<a href="#">Privacy Policy</a>.
+              </p>
+              <StyledInputError fontSize="font-size-m">
+                {error}
+              </StyledInputError>
               <PrimaryButton type="submit">Agree and continue</PrimaryButton>
               <Separator />
               <StyledLabel color="neutral-08" size="font-size-s">
@@ -105,7 +228,7 @@ export const Signup = () => {
               </StyledLabel>
 
               <Flex>
-                <StyledCheckbox />
+                <StyledCheckbox {...register('agreement')} />
                 <StyledLabel color="neutral-08" size="font-size-s">
                   I don't want to receive marketing messages from Airbnb.
                 </StyledLabel>
@@ -116,5 +239,5 @@ export const Signup = () => {
       </Modal>
     )
   }
-  return [openModal, closeModal, SignUpForm]
+  return { openSignup, closeSignup, SignUpForm }
 }

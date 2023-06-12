@@ -95,6 +95,8 @@ export const languages = [
   'Portuguese',
 ]
 
+export const country_codes = ['US', 'MX', 'GT', 'SA']
+
 export const house_rules = ['No smoking', 'No pets', 'No parties or events']
 
 const generateFakeListing = (): Listing => ({
@@ -119,9 +121,8 @@ const generateFakeListing = (): Listing => ({
     precision: 0.01,
   }),
   cleaning_fee: faker.number.float({ min: 20, max: 100, precision: 0.01 }),
-  extra_people: faker.number.float({ min: 10, max: 50, precision: 0.01 }),
-  guests_included: faker.number.float({ min: 1, max: 10 }),
-  rating: faker.number.float({ min: 1, max: 5, precision: 0.1 }),
+  extra_people: faker.number.int({ min: 10, max: 50 }),
+  guests_included: faker.number.int({ min: 1, max: 10 }),
   images: [
     faker.image.urlLoremFlickr({ category: 'city' }),
     faker.image.urlLoremFlickr({ category: 'city' }),
@@ -134,7 +135,7 @@ const generateFakeListing = (): Listing => ({
     street: faker.location.streetAddress(),
     suburb: faker.location.city(),
     country: faker.location.country(),
-    country_code: faker.location.countryCode(),
+    country_code: faker.helpers.arrayElement(country_codes),
     location: {
       type: 'Point',
       coordinates: faker.location.nearbyGPSCoordinate(),
@@ -180,13 +181,41 @@ const generateFakeListing = (): Listing => ({
   reviews: {
     review_id: faker.string.uuid(),
     review_scores: {
-      review_scores_accuracy: faker.number.int({ min: 1, max: 5 }),
-      review_scores_cleanliness: faker.number.int({ min: 1, max: 5 }),
-      review_scores_checkin: faker.number.int({ min: 1, max: 5 }),
-      review_scores_communication: faker.number.int({ min: 1, max: 5 }),
-      review_scores_location: faker.number.int({ min: 1, max: 5 }),
-      review_scores_value: faker.number.int({ min: 1, max: 5 }),
-      review_scores_rating: faker.number.int({ min: 1, max: 5 }),
+      review_scores_accuracy: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_cleanliness: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_checkin: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_communication: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_location: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_value: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
+      review_scores_rating: faker.number.float({
+        min: 1,
+        max: 5,
+        precision: 0.1,
+      }),
     },
     detail: [
       {
@@ -217,13 +246,15 @@ const generateFakeListing = (): Listing => ({
   },
 })
 
-const randomListing: Listing[] = Array.from(
-  { length: 200 },
-  generateFakeListing
-)
+export const exportSeededData = () => {
+  const randomListing: Listing[] = Array.from(
+    { length: 200 },
+    generateFakeListing
+  )
 
-fs.writeFileSync(
-  'src/api/data/listing.json',
-  JSON.stringify(randomListing, null, 2)
-)
-console.log(`Listing data saved to listing.json`)
+  fs.writeFileSync(
+    'src/api/data/listing.json',
+    JSON.stringify(randomListing, null, 2)
+  )
+  console.log(`Listing data saved to listing.json`)
+}

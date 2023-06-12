@@ -7,29 +7,43 @@ import {
 import { useToggle } from '../../../hooks/useToggle'
 import { useClickedOutside } from '../../../hooks/useClickedOutside'
 import { useEffect } from 'react'
-import { Login } from '../../Auth/Login'
-import { Signup } from '../../Auth/Signup'
+import { useAuthContext } from '../../../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const MENU_OPTIONS = {
   LOGIN: Symbol('login'),
   SIGN_UP: Symbol('sign up'),
+  LOG_OUT: Symbol('log out'),
+  WISHLIST: Symbol('wishlist'),
   BECOME_HOST: Symbol('become host'),
   HELP: Symbol('help'),
 }
 
 export const UserMenu = () => {
   const [isExpanded, toggleIsExpanded] = useToggle(false)
-  const [clickedOutside, componentRef] = useClickedOutside({
+  const [clickedOutside, componentRef] = useClickedOutside<HTMLDivElement>({
     dependencies: [isExpanded],
   })
-  const [loginModal, , LoginForm] = Login()
-  const [signupModal, , SignUpForm] = Signup()
+  const { user, logOut, openLogin, openSignup } = useAuthContext()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (isExpanded && clickedOutside) {
       handleExpand()
     }
   }, [clickedOutside])
+
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isExpanded) {
+        toggleIsExpanded()
+      }
+    }
+    window.addEventListener('keydown', handleEsc)
+    return () => {
+      window.removeEventListener('keydown', handleEsc)
+    }
+  }, [isExpanded])
 
   const handleExpand = () => {
     toggleIsExpanded()
@@ -38,10 +52,16 @@ export const UserMenu = () => {
   const handleClick = (option: Symbol) => {
     switch (option) {
       case MENU_OPTIONS.LOGIN:
-        loginModal()
+        openLogin()
         break
       case MENU_OPTIONS.SIGN_UP:
-        signupModal()
+        openSignup()
+        break
+      case MENU_OPTIONS.LOG_OUT:
+        logOut()
+        break
+      case MENU_OPTIONS.WISHLIST:
+        navigate('/wishlist')
         break
       case MENU_OPTIONS.BECOME_HOST:
         break
@@ -60,30 +80,46 @@ export const UserMenu = () => {
         draggable={false}
       >
         <BiMenu fontSize="1.5em" />
-        <StyledAvatar />
-        <FloatingMenuWrapper width={'223px'} expanded={isExpanded}>
-          <FloatingMenuItem
-            fontWeight="font-weight-bold"
-            onClick={() => handleClick(MENU_OPTIONS.LOGIN)}
-          >
-            Log in
-          </FloatingMenuItem>
-          <FloatingMenuItem onClick={() => handleClick(MENU_OPTIONS.SIGN_UP)}>
-            Sign up
-          </FloatingMenuItem>
-          <FloatingMenuItem separator={true} />
-          <FloatingMenuItem
-            onClick={() => handleClick(MENU_OPTIONS.BECOME_HOST)}
-          >
-            Airbnb your home
-          </FloatingMenuItem>
-          <FloatingMenuItem onClick={() => handleClick(MENU_OPTIONS.HELP)}>
-            Help
-          </FloatingMenuItem>
+        <StyledAvatar url={user?.user.avatar} />
+        <FloatingMenuWrapper
+          width={'223px'}
+          expanded={isExpanded}
+          right="0"
+          margin="20px 20px"
+        >
+          {!user && (
+            <>
+              <FloatingMenuItem
+                onClick={() => handleClick(MENU_OPTIONS.SIGN_UP)}
+              >
+                Sign up
+              </FloatingMenuItem>
+              <FloatingMenuItem
+                fontWeight="font-weight-bold"
+                onClick={() => handleClick(MENU_OPTIONS.LOGIN)}
+              >
+                Log in
+              </FloatingMenuItem>
+            </>
+          )}
+
+          {user && (
+            <>
+              <FloatingMenuItem
+                fontWeight="font-weight-bold"
+                onClick={() => handleClick(MENU_OPTIONS.WISHLIST)}
+              >
+                My Wishlist
+              </FloatingMenuItem>
+              <FloatingMenuItem
+                onClick={() => handleClick(MENU_OPTIONS.LOG_OUT)}
+              >
+                Log out
+              </FloatingMenuItem>
+            </>
+          )}
         </FloatingMenuWrapper>
       </StyledUserMenu>
-      {LoginForm()}
-      {SignUpForm()}
     </>
   )
 }

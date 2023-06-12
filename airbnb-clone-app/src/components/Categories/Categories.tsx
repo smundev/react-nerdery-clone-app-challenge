@@ -1,14 +1,15 @@
-import { RiEqualizerLine } from 'react-icons/ri'
-import { SecondaryButton } from '../Common/Button.styled'
 import { ScrollContainer } from '../Common/ScrollContainer'
 import { Card } from './Card'
 import { StyledCategory } from './Category.Styled'
 import { categories } from './catalog'
 import { StickyWrapper } from '../Common/StickyWrapper'
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export const Categories = () => {
   const [verticalScroll, setVerticalScroll] = useState(0)
+  const [searchParams] = useSearchParams()
+  const paramValue = searchParams.get('property_type')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -23,12 +24,20 @@ export const Categories = () => {
       <StyledCategory showShadow={verticalScroll <= 50}>
         <ScrollContainer>
           {categories.map((item, i) => {
-            return <Card key={i} label={item.label} icon={item.icon} />
+            return (
+              <Card
+                key={i}
+                label={item.label}
+                icon={item.icon}
+                selected={paramValue === item.label ? 'true' : 'false'}
+              />
+            )
           })}
         </ScrollContainer>
+        {/* TODO - filters not part of MVP
         <SecondaryButton fontWeight="bold">
           <RiEqualizerLine /> Filters
-        </SecondaryButton>
+        </SecondaryButton>*/}
       </StyledCategory>
     </StickyWrapper>
   )

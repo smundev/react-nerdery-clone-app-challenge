@@ -7,6 +7,7 @@ export const ModalContainer = styled.div<{ isOpen: boolean }>`
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 99;
   background-color: rgba(0, 0, 0, 0.5);
   display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
   align-items: center;
@@ -16,7 +17,8 @@ export const ModalContainer = styled.div<{ isOpen: boolean }>`
 export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  width: 568px;
+  width: clamp(100px, 100%, 568px);
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.body};
   padding: 20px;
   border-radius: 12px;

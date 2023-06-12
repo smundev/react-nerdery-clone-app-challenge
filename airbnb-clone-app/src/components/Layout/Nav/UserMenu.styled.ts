@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+type AvataProps = {
+  url?: string
+}
+
 export const StyledUserMenu = styled.div`
   display: relative;
   flex-direction: row;
@@ -21,11 +25,11 @@ export const StyledUserMenu = styled.div`
   }
 `
 
-export const StyledAvatar = styled.img`
+export const StyledAvatar = styled.img<AvataProps>`
   width: 24px;
   height: 24px;
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors['neutral-03']};
   cursor: pointer;
-  content: url('/images/placeholder.jpg');
+  content: url(${({ url }) => url || '/images/placeholder.jpg'});
 `

@@ -3,15 +3,20 @@ import styled, { css } from 'styled-components'
 type WrapperProps = {
   width?: string
   expanded?: boolean
+  left?: string
+  right?: string
+  margin?: string
 }
 export const FloatingMenuWrapper = styled.div<WrapperProps>`
   position: absolute;
   display: ${({ expanded }) => (expanded ? 'flex' : 'none')};
-  margin: 20px 10px;
-  right: 20px;
   flex-direction: column;
   padding: 10px 0;
   overflow-x: hidden;
+  left: ${({ left }) => (left ? left : 'auto')};
+  right: ${({ right }) => (right ? right : 'auto')};
+  margin: ${({ margin }) => (margin ? margin : '0')};
+  z-index: 10;
 
   width: ${({ width = 'auto' }) => width};
   align-items: flex-start;
