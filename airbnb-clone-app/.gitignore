@@ -25,4 +25,4 @@ dist-ssr
 *.env
 db.json
 listing.json
-coverage/*
+coverage/
